@@ -18,6 +18,7 @@ final _databaseReference = Firestore.instance;
 final AuthService _auth = AuthService();
 
 //////////////////// Get data Home ////////////////////
+
 // Get companies
 getNewsCompanies(BuildContext context) {
 
@@ -575,7 +576,6 @@ getReservationsToday(BuildContext context) {
 }
 
 //Get all companies for search
-
 getCompanies(BuildContext context) {
 
   // navigateToCompany(DocumentSnapshot ds) {
@@ -667,6 +667,7 @@ getCompanies(BuildContext context) {
 
 //////////////////// Get data Profile ////////////////////
 
+//Get personal info
 getPersonalInfo(BuildContext context){
   var user = Provider.of<User>(context).uid;
   return Expanded(
