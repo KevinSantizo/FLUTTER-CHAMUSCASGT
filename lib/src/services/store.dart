@@ -3,12 +3,15 @@ import 'dart:math';
 import 'package:animate_do/animate_do.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsport/src/components/theme.dart';
 import 'package:newsport/src/models/user.dart';
+import 'package:newsport/src/pages/company.dart';
 import 'package:newsport/src/services/auth.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
@@ -22,14 +25,14 @@ final AuthService _auth = AuthService();
 // Get companies
 getNewsCompanies(BuildContext context) {
 
-  // navigateToCompany(DocumentSnapshot ds) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => CompanyPage(
-  //       ds: ds,
-  //   )));
-  // }
+  navigateToCompany(DocumentSnapshot ds) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+  }
 
   return Material(
     elevation: 3.0,
@@ -71,8 +74,7 @@ getNewsCompanies(BuildContext context) {
                         return Builder(
                           builder: (BuildContext context){
                             return InkWell(
-                              onTap: (){},
-                              // onTap: () => navigateToCompany(company),
+                              onTap: () => navigateToCompany(company),
                               child: Stack(
                                 children: <Widget>[
                                   Container(
@@ -156,14 +158,14 @@ getNewsCompanies(BuildContext context) {
 //Get most visited
 getMostVisitedCompanies(BuildContext context){
 
-  // navigateToCompany(DocumentSnapshot ds) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => CompanyPage(
-  //       ds: ds,
-  //   )));
-  // }
+  navigateToCompany(DocumentSnapshot ds) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+  }
   return Material(
     elevation: 3.0,
     child: Container(
@@ -199,12 +201,10 @@ getMostVisitedCompanies(BuildContext context){
                   final String _address = doc.data['address'];
                   final String _name    = doc.data['name'];
                   final String _city    = doc.data['city']; 
-
                   return Builder(
                     builder: (BuildContext context){
                       return InkWell(
-                        onTap: (){},
-                        // onTap: () => navigateToCompany(company),
+                        onTap: () => navigateToCompany(company),
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 5.0),
                           child: Column(
@@ -301,14 +301,14 @@ getMostVisitedCompanies(BuildContext context){
 // Get best fields
 getTopCompanies(BuildContext context){
 
-  // navigateToCompany(DocumentSnapshot ds) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => CompanyPage(
-  //       ds: ds,
-  //   )));
-  // }
+  navigateToCompany(DocumentSnapshot ds) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+  }
   return Material(
     elevation: 3.0,
     child: Container(
@@ -345,8 +345,7 @@ getTopCompanies(BuildContext context){
                   return Builder(
                     builder: (BuildContext context){
                       return InkWell(
-                        onTap: (){},
-                        // onTap: () => navigateToCompany(company),
+                        onTap: () => navigateToCompany(company),
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 5.0),
                           child: Column(
@@ -445,27 +444,36 @@ getReservationsToday(BuildContext context) {
   var user = Provider.of<User>(context).uid;
   return Container(
     child: StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('users').document(user).collection('reservation').where('day', isEqualTo: DateTime.now().day).snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isEqualTo: DateTime.now().day).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
-        final a = snapshot.data.documents;
-        if (a?.isEmpty ?? false) {
+        if (snapshot.data.documents.isEmpty) {
           return Material(
             elevation: 3.0,
             child: Container(
               color: Colors.white,
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+              // padding: EdgeInsets.only(bottom: 25.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('No tienes reservaciones para hoy', style: GoogleFonts.montserrat(textStyle:  TextStyle( fontSize: 20.0,)) ),
+                  Row(
+                    children: <Widget>[
+                      Icon(FontAwesome.soccer_ball_o),
+                      VerticalDivider(width: 5.0),
+                      Text('Chamuscas de hoy', style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 20.0)),),
+                    ],
+                  ),
+                  SizedBox(height: 10.0,),
+                  Text('No tienes reservaciones para hoy.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
                   SizedBox(height: 30.0,),
                   FlatButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    padding: EdgeInsets.symmetric(vertical: 25.0),
                     textColor: Colors.white,
                     color: myTheme.primaryColor,
                     onPressed: () => Navigator.pushNamed(context, 'search-companies'),
@@ -476,100 +484,115 @@ getReservationsToday(BuildContext context) {
             ),
           );
         } else {
-          return Container(
-            height: 300.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (BuildContext context, int i){
-                return  Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Image(
-                                    image: NetworkImage(snapshot.data.documents[i]['image_field_url']),
-                                    height: 120.0,
-                                    fit: BoxFit.cover,
-                                    width: 170.0,
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+          return Material(
+            elevation: 3.0,
+            child: Container(
+            padding: EdgeInsets.only(left: 15.0, top: 25.0, bottom: 25.0),
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Image.asset('assets/ranking.png', height: 25.0),
+                    VerticalDivider(width: 5.0),
+                    Text('Chamuscas de hoy', style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 20.0)),),
+                  ],
+                ),
+                  CarouselSlider(
+                    scrollDirection: Axis.vertical,
+                      viewportFraction: 0.9,
+                      height: 150.0,
+                      enableInfiniteScroll: false,
+                      items: snapshot.data.documents.map((res){
+                        final DocumentSnapshot doc = res;
+                        return Builder(
+                          builder: (BuildContext context){
+                            return Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Row(
                                     children: <Widget>[
-                                      Text(snapshot.data.documents[i]['company'], style: GoogleFonts.montserrat(color: Colors.white), ),
-                                      Text(snapshot.data.documents[i]['address'], textScaleFactor: 0.8, style: GoogleFonts.montserrat(color: Colors.white), ),
+                                      Stack(
+                                        children: <Widget>[
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: Image(
+                                              image: NetworkImage(doc.data['image_field_url']),
+                                              height: 120.0,
+                                              fit: BoxFit.cover,
+                                              width: 150.0,
+                                            ),
+                                          ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Text(doc.data['company'], style: GoogleFonts.montserrat(color: Colors.white), ),
+                                                  Text(doc.data['address'], textScaleFactor: 0.8, style: GoogleFonts.montserrat(color: Colors.white), ),
+                                                ],
+                                              ),
+                                              height: 120.0,
+                                              width: 150.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10.0),
+                                                color: Colors.black.withOpacity(0.6)
+                                              ),
+                                            )
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(Feather.calendar, size: 20.0),
+                                              VerticalDivider(width: 5.0,),
+                                              Text('${doc.data['day']}-${doc.data['month']}-${doc.data['year']}')
+                                            ],
+                                          ),
+                                          SizedBox(height: 20.0,),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(Feather.clock, size: 20.0),
+                                              VerticalDivider(width: 5.0),
+                                              Text('${doc.data['schedule']}:00 PM')
+                                            ],
+                                          ),
+                                          SizedBox(height: 20.0,),
+                                          Row(
+                                            children: <Widget>[
+                                              Transform.rotate(
+                                                  angle: - pi * 0.5,
+                                                  child: Icon(MdiIcons.soccerField, size: 20.0,)
+                                                ),
+                                              VerticalDivider(width: 5.0),
+                                              Text('${doc.data['type']}')
+                                            ],
+                                          )
+                                        ],
+                                      )
                                     ],
                                   ),
-                                  height: 120.0,
-                                  width: 170.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.black.withOpacity(0.6)
-                                  ),
-                                )
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Icon(Feather.calendar, size: 20.0),
-                                    VerticalDivider(width: 5.0,),
-                                    Text('${snapshot.data.documents[i]['day']}-${snapshot.data.documents[i]['month']}-${snapshot.data.documents[i]['year']}')
-                                  ],
-                                ),
-                                SizedBox(height: 10.0,),
-                                Row(
-                                  children: <Widget>[
-                                    Icon(Feather.clock, size: 20.0),
-                                    VerticalDivider(width: 5.0),
-                                    Text('${snapshot.data.documents[i]['schedule']}')
-                                  ],
-                                ),
-                                SizedBox(height: 10.0,),
-                                Row(
-                                  children: <Widget>[
-                                    Transform.rotate(
-                                      angle: - pi * 0.5,
-                                      child: Icon(MdiIcons.soccerField, size: 20.0,)
-                                    ),
-                                    VerticalDivider(width: 5.0),
-                                    Text('${snapshot.data.documents[i]['type']}')
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5.0),
-                          child: Image(
-                            image: NetworkImage(snapshot.data.documents[i]['logo_photo']),
-                            height: 40.0,
-                          ),
-                        )
-                      ],
-                    ),
+                                  Image(
+                                    image: NetworkImage(doc.data['logo_photo']),
+                                    height: 40.0,
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        );
+                    }).toList(), 
                   ),
-                );
-              },
+                ],
+              ),
             ),
           );
-        }
+        } 
       },
     ),
   );
@@ -578,15 +601,15 @@ getReservationsToday(BuildContext context) {
 //Get all companies for search
 getCompanies(BuildContext context) {
 
-  // navigateToCompany(DocumentSnapshot ds) {
-  // print(ds.data);
-  // Navigator.push(
-  //   context,
-  //   MaterialPageRoute(
-  //     builder: (context) => CompanyPage(
-  //     ds: ds,
-  // )));
-  // }
+  navigateToCompany(DocumentSnapshot ds) {
+  print(ds.data);
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CompanyPage(
+      ds: ds,
+  )));
+  }
 
   return  StreamBuilder<QuerySnapshot>(
     stream: _databaseReference.collection('company').orderBy('owner').snapshots(),
@@ -620,8 +643,7 @@ getCompanies(BuildContext context) {
                 crossAxisCount: (orientation == Orientation.portrait) ? 2 : 3),
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: (){},
-                    // onTap: () => navigateToCompany(snapshot.data.documents[index]),
+                    onTap: () => navigateToCompany(snapshot.data.documents[index]),
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
                       child: GridTile(
@@ -711,4 +733,846 @@ getPersonalInfo(BuildContext context){
     ),
   ),
 );
+}
+
+//////////////////// END Get info profile ////////////////////
+
+
+//////////////////// Get reservations ////////////////////
+// Get past reservations
+getPastReservations(BuildContext context){
+  var user = Provider.of<User>(context).uid;
+  return Container(
+    alignment: Alignment.bottomCenter,
+    width: double.infinity,
+      child: StreamBuilder<QuerySnapshot>(
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isLessThan:  DateTime.now().day).snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+         if (snapshot.data.documents?.isEmpty ?? false){
+          return Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 15.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SvgPicture.asset('assets/junior.svg', height: 225.0,),
+                SizedBox(height: 10.0,),
+                Text('No tienes reservaciones todavía, explora nuestras canchas y empieza a jugar.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
+                SizedBox(height: 30.0,),
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  textColor: Colors.white,
+                  color: myTheme.primaryColor,
+                  onPressed: () => Navigator.pushNamed(context, 'search-companies'),
+                  child: Text('Explorar canchas', textScaleFactor: 1.2, style: GoogleFonts.montserrat(), ),
+                )
+              ],
+            ),
+          );
+        } else {
+          final doc = snapshot.data.documents;
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: ListView(
+                children: <Widget>[
+                  if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,)),
+                  for (var item in doc)
+                  // if(item['schedule'] < TimeOfDay.now().hour)
+                    Container(
+                      child: Card(
+                        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Stack(
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                    child: Image(
+                                      image: NetworkImage(item['image_field_url']),
+                                      fit: BoxFit.cover,
+                                      height: MediaQuery.of(context).size.height * 0.25,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                      color: Colors.black.withOpacity(0.6)
+                                    ),
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('${item['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text(' ${item['type']}', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        Icon(Feather.clock, size: 20.0, color: Colors.white ),
+                                        Text(' ${item['schedule']}:00 PM', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Icon(Feather.check_circle, size: 20, color: Colors.green),
+                                            VerticalDivider(width: 6.0,),
+                                            Text('Partido jugado', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Icon(Feather.map_pin, size: 20.0, color: Colors.grey),
+                                            VerticalDivider(width: 3.0,),
+                                            Text(' ${item['address']}, ${item['city']}', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0),
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(Feather.calendar, size: 20, color: Colors.grey,),
+                                            VerticalDivider(width: 3.0,),
+                                            Text('${item['day']}-${item['month']}-${item['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Image(
+                                      image: NetworkImage(item['logo_photo']),
+                                      height: 40.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text('Extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                    // VerticalDivider(width: 50.0,),
+                                    Text('Precio', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    item['ball'] || item['tshirt']  ? Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          item['tshirt'] ? Row(
+                                            children: <Widget>[
+                                              Icon(MdiIcons.tshirtCrew, size: 20),
+                                              VerticalDivider(width: 3.0,),
+                                              Text('${item['tshirts_total']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            ],
+                                          ) : Container(),
+                                          SizedBox(height: 5.0,),
+                                          item['ball'] ? Row(
+                                            children: <Widget>[
+                                              Icon(FontAwesome.soccer_ball_o, size: 20),
+                                              VerticalDivider(width: 3.0,),
+                                              Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            ],
+                                          ) : Container(),
+                                        ],
+                                      ),
+                                    ) : Text('No tienes extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                    VerticalDivider(width: 5.0, color: Colors.black ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Q${item['price']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          Divider(),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                // VerticalDivider(width: 50.0,),
+                                Text('Q${item['total']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),        
+                  ),
+                ) 
+              ],
+            ),
+          );
+        }
+      }
+    ),
+  );
+}
+
+// Get pendings reservation
+getPendingReservations(BuildContext context) {
+  var user = Provider.of<User>(context).uid;
+  return Container(
+    alignment: Alignment.bottomCenter,
+    width: double.infinity,
+      child: StreamBuilder<QuerySnapshot>(
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isGreaterThanOrEqualTo: DateTime.now().day).snapshots(),
+      builder: (context, snapshot) {
+        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+        final a = snapshot.data.documents;
+        if (a?.isEmpty ?? false){
+        return Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 15.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SvgPicture.asset('assets/junior.svg', height: 225.0,),
+                SizedBox(height: 10.0,),
+                Text('No tienes reservaciones pendientes, explora nuestras canchas y empieza a jugar.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
+                SizedBox(height: 30.0,),
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  textColor: Colors.white,
+                  color: myTheme.primaryColor,
+                  onPressed: () => Navigator.pushNamed(context, 'search-companies'),
+                  child: Text('Explorar canchas', textScaleFactor: 1.2, style: GoogleFonts.montserrat(), ),
+                )
+              ],
+            ),
+          );
+        } else{
+          final doc = snapshot.data.documents;
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: ListView(
+                children: <Widget>[
+                  if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,)),
+                  for (var item in doc)
+                  // if(item['schedule'] > TimeOfDay.now().hour)
+                    Container(
+                      child: Card(
+                        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Stack(
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                    child: Image(
+                                      image: NetworkImage(item['image_field_url']),
+                                      fit: BoxFit.cover,
+                                      height: MediaQuery.of(context).size.height * 0.25,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                      color: Colors.black.withOpacity(0.6)
+                                    ),
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('${item['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text(' ${item['type']}', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        Icon(Feather.clock, size: 20.0, color: Colors.white ),
+                                        Text(' ${item['schedule']}:00 PM', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Container(
+                                              height: 17.0,
+                                              width: 17.0,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.deepOrange
+                                              ),
+                                            ),
+                                            VerticalDivider(width: 6.0,),
+                                            Text('Pendiente', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Icon(Feather.map_pin, size: 20.0, color: Colors.grey),
+                                            VerticalDivider(width: 3.0,),
+                                            Text(' ${item['address']}, ${item['city']}', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0),
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(Feather.calendar, size: 20, color: Colors.grey,),
+                                            VerticalDivider(width: 3.0,),
+                                            Text('${item['day']}-${item['month']}-${item['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Image(
+                                      image: NetworkImage(item['logo_photo']),
+                                      height: 40.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text('Extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                    // VerticalDivider(width: 50.0,),
+                                    Text('Precio', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10.0,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    item['ball'] || item['tshirt']  ? Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          item['tshirt'] ? Row(
+                                            children: <Widget>[
+                                              Icon(MdiIcons.tshirtCrew, size: 20),
+                                              VerticalDivider(width: 3.0,),
+                                              Text('${item['tshirts_total']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            ],
+                                          ) : Container(),
+                                          SizedBox(height: 5.0,),
+                                          item['ball'] ? Row(
+                                            children: <Widget>[
+                                              Icon(FontAwesome.soccer_ball_o, size: 20),
+                                              VerticalDivider(width: 3.0,),
+                                              Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            ],
+                                          ) : Container(),
+                                        ],
+                                      ),
+                                    ) : Text('No tienes extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                    VerticalDivider(width: 5.0, color: Colors.black ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Q${item['price']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(),
+                              Divider(),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                    // VerticalDivider(width: 50.0,),
+                                    Text('Q${item['total']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Text('Cancelar', textScaleFactor: 1.2,  style: GoogleFonts.montserrat() ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)
+                                    ),
+                                      textColor: Colors.white,
+                                      color: Colors.red,
+                                      onPressed: (){
+                                        showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog( 
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                                                padding: EdgeInsets.only(top: 30.0),
+                                                decoration: new BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.rectangle,
+                                                  borderRadius: BorderRadius.circular(20.0),
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: <Widget>[
+                                                     Text(
+                                                      '¿Desea cancelar la reserva?',
+                                                      style: TextStyle(
+                                                        fontSize: 20.0,
+                                                        fontWeight: FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 30.0),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: <Widget>[
+                                                        FlatButton(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(10.0)
+                                                          ),
+                                                          textColor: Colors.grey,
+                                                          // color: Colors.grey,
+                                                          onPressed: () => Navigator.of(context).pop(),
+                                                          child: Text('No', textScaleFactor: 1.2, style: GoogleFonts.montserrat(), ),
+                                                        ),
+                                                        FlatButton(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(10.0)
+                                                          ),
+                                                          textColor: Colors.red,
+                                                          // color: Colors.red,
+                                                          onPressed: () async {
+                                                            Navigator.pop(context);
+                                                            // showDialog(
+                                                            //   context: context,
+                                                            //   builder: (context) => Center(
+                                                            //     child: Loading(indicator: BallPulseIndicator(), size: 70.0,color: Colors.white)
+                                                            //   )
+                                                            // );
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (context) => AlertDialog(
+                                                                // title: Text('${bloc.username}'),
+                                                                content: Row(
+                                                                  children: <Widget>[
+                                                                    Text('Reservación cancelada', textScaleFactor: 1.1, style: GoogleFonts.montserrat(), ),
+                                                                  ],
+                                                                ),
+                                                                actions: <Widget>[
+                                                                  FlatButton(
+                                                                    child: Text(
+                                                                      'Ok',
+                                                                      style: TextStyle(
+                                                                        color: myTheme.primaryColor,
+                                                                      ),
+                                                                    ),
+                                                                    onPressed: () => Navigator.pop(context),                                                                                                       
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            );
+                                                            await cancelReservation(item.documentID);
+                                                          },
+                                                          child: Text('Sí', textScaleFactor: 1.2, style: GoogleFonts.montserrat()),
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),        
+                      ),
+                  ) 
+                ],
+              ),
+            );
+          }
+        }
+      ),
+    );
+  }
+
+// Get cancelled reservations
+getCancelledReservations(BuildContext context) {
+  var user = Provider.of<User>(context).uid;
+  print(user);
+  return Container(
+    alignment: Alignment.bottomCenter,
+    width: double.infinity,
+      child: StreamBuilder<QuerySnapshot>(
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('status', isEqualTo: 'Cancelada').snapshots(),
+      builder: (context, snapshot) {
+        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+        final a = snapshot.data.documents;
+        if (a?.isEmpty ?? false){
+          return Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 15.0),
+            child: ListView(
+              shrinkWrap: true,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SvgPicture.asset('assets/junior.svg', height: 225.0,),
+                SizedBox(height: 10.0,),
+                Text('No tienes reservaciones canceladas.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
+                SizedBox(height: 30.0,),
+
+              ],
+            ),
+          );
+        } else {
+          final doc = snapshot.data.documents;
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: ListView.builder(
+                itemCount: doc.length,
+                itemBuilder: (BuildContext context, int i){
+                  final String  _address      = doc[i]['address'];
+                  final String  _city         = doc[i]['city'];
+                  final String  _company      = doc[i]['company'];
+                  final String  _type         = doc[i]['type'];
+                  final String  _schedule     = doc[i]['schedule'];
+                  final String  _status       = doc[i]['status'];
+                  final bool    _ball         = doc[i]['ball'];
+                  final bool    _tshirt       = doc[i]['tshirt'];
+                  final int     _totalTshirt  = doc[i]['tshirts_total'];
+                  final int     _day          = doc[i]['day'];
+                  final int     _month        = doc[i]['month'];
+                  final int     _year         = doc[i]['year'];
+                  final int     _price        = doc[i]['price'];
+                  final int     _total        = doc[i]['total'];
+                  
+
+
+                 return doc[i]['day'] >= DateTime.now().day ? Container(
+                   child: Card(
+                     margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                     child: Padding(
+                       padding: const EdgeInsets.symmetric(vertical: 15.0),
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: <Widget>[
+                           Stack(
+                             children: <Widget>[
+                               ClipRRect(
+                                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),                             
+                                 child: Image(
+                                   image: NetworkImage(doc[i]['image_field_url']),
+                                   fit: BoxFit.cover,
+                                   height: MediaQuery.of(context).size.height * 0.25,
+                                   width: double.infinity,
+                                 ),
+                               ),
+                               Container(
+                                 height: MediaQuery.of(context).size.height * 0.25,
+                                 width: double.infinity,
+                                 decoration: BoxDecoration(
+                                   borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),                             
+                                   color: Colors.black.withOpacity(0.6)
+                                 ),
+                               ),
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.25,
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(' $_company', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                    Text(' $_type', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Icon(Feather.clock, size: 20.0, color: Colors.white ),
+                                    Text(' $_schedule', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                  ],
+                                ),
+                              ),
+                             ],
+                           ),
+                           SizedBox(height: 10.0,),
+                           Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                             child: Row(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: <Widget>[
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: <Widget>[
+                                     Row(
+                                       crossAxisAlignment: CrossAxisAlignment.end,
+                                       children: <Widget>[
+                                         Icon(Feather.x_square, size: 20, color: Colors.red),
+                                         VerticalDivider(width: 6.0,),
+                                         Text('$_status', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                       ],
+                                     ),
+                                     SizedBox(height: 5.0),
+                                     Row(
+                                       crossAxisAlignment: CrossAxisAlignment.end,
+                                       children: <Widget>[
+                                        Icon(Feather.map_pin, size: 20.0, color: Colors.grey),
+                                        VerticalDivider(width: 3.0,),
+                                        Text(' $_address, $_city', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.0),
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(Feather.calendar, size: 20, color: Colors.grey,),
+                                        VerticalDivider(width: 3.0,),
+                                        Text('$_day-$_month-$_year', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Image(
+                                  image: NetworkImage(doc[i]['logo_photo']),
+                                  height: 40.0,
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20.0,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text('Extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                // VerticalDivider(width: 50.0,),
+                                Text('Precio', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10.0,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                _ball || _tshirt ? Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      _tshirt ? Row(
+                                        children: <Widget>[
+                                          Icon(MdiIcons.tshirtCrew, size: 20),
+                                          VerticalDivider(width: 3.0,),
+                                          Text('$_totalTshirt', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                        ],
+                                      ) : Container(),
+                                      SizedBox(height: 5.0,),
+                                      _ball ? Row(
+                                        children: <Widget>[
+                                          Icon(FontAwesome.soccer_ball_o, size: 20),
+                                          VerticalDivider(width: 3.0,),
+                                          Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                        ],
+                                      ) : Container(),
+                                    ],
+                                  ),
+                                ) : Text('No tienes extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                VerticalDivider(width: 5.0, color: Colors.black ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Q$_price.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                // VerticalDivider(width: 50.0,),
+                                Text('Q$_total.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ],
+                       ),
+                     ),        
+                   ),
+                 ) : Container ();
+                },
+              ),
+            );
+          }
+        }
+      ),
+    );
+  }
+
+//Cancel reservation
+  cancelReservation(String idReservation) async {
+  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).updateData({
+    'status' : 'Cancelada'
+  });
+}
+
+
+//Add reservations per user
+Future<bool> adReservationPerUser(
+  String  addressR,
+  bool    isBallR,
+  String  cityR,
+  String  companyR,
+  int     month,
+  int     day,
+  int     year,
+
+  // String  descriptionR,
+  String  measuresR,
+  String  nameR,
+  String  phoneR,
+  int     priceR,
+  String  logoPhoto,
+  int     scheduleR,
+  int     totalR,
+  bool    isTshirtR,
+  int     totalTshirtR,
+  String  typeR,
+  String  urlImageR,
+) async {
+  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+
+  return await Firestore.instance.collection('users').document(currentUser.uid).collection('reservation').document().setData({
+    'address'         : addressR,
+    'ball'            : isBallR,
+    'city'            : cityR,
+    'company'         : companyR,
+    'month'           : month,
+    'day'             : day,
+    'year'            : year,
+    // 'description'     : descriptionR,
+    'measures'        : measuresR,
+    'name'            : nameR,
+    'phone'           : phoneR,
+    'price'           : priceR,
+    'logo_photo'      : logoPhoto,
+    'schedule'        : scheduleR,
+    'total'           : totalR,
+    'tshirt'          : isTshirtR,
+    'tshirts_total'   : totalTshirtR,
+    'type'            : typeR,
+    'image_field_url' : urlImageR
+  }).then((result) => true ).catchError((err)=> false);
 }

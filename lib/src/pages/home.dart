@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +6,10 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsport/src/components/theme.dart';
-import 'package:newsport/src/models/user.dart';
+import 'package:newsport/src/pages/company.dart';
 import 'package:newsport/src/services/store.dart';
 import 'package:newsport/src/utils/utils.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -24,15 +22,15 @@ class _HomeState extends State<Home> {
   final dataBaseReference = Firestore.instance;
   SwiperController _scrollController;
 
-  // navigateToCompany(DocumentSnapshot ds) {
-  //   print(ds.data);
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => CompanyPage(
-  //       ds: ds,
-  //   )));
-  // }
+  navigateToCompany(DocumentSnapshot ds) {
+    print(ds.data);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +106,7 @@ class _HomeState extends State<Home> {
                 itemCount: doc.length,
                 itemBuilder: (BuildContext context, int index ){
                   return InkWell(
-                    onTap: (){},
-                    // onTap: () => navigateToCompany(doc[index]),
+                    onTap: () => navigateToCompany(doc[index]),
                     child: Container(
                     child: Stack(
                     children: <Widget>[

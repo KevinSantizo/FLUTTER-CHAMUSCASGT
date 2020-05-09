@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:newsport/src/components/theme.dart';
+import 'package:newsport/src/pages/company.dart';
 import 'package:newsport/src/services/store.dart';
 import 'package:newsport/src/utils/utils.dart';
 
@@ -13,15 +15,15 @@ class AllCompaniesPage extends StatefulWidget {
 class _AllCompaniesPageState extends State<AllCompaniesPage> {
 
 
-  //  navigateToCompany(DocumentSnapshot ds) {
-  //   print(ds.data);
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => CompanyPage(
-  //       ds: ds,
-  //   )));
-  // }
+   navigateToCompany(DocumentSnapshot ds) {
+    print(ds.data);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+  }
 
   @override
   Widget build(BuildContext context) {

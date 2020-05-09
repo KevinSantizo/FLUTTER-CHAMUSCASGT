@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newsport/src/authenticate/wrapper.dart';
 import 'package:newsport/src/models/user.dart';
 import 'package:newsport/src/pages/all_companies.dart';
+import 'package:newsport/src/pages/total_reservations.dart';
 import 'package:newsport/src/pages/tournaments.dart';
 import 'package:newsport/src/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'tournaments'       : (BuildContext context) => Tournaments(),
           'search-companies'  : (BuildContext context) => AllCompaniesPage(),
+          'total-res'         : (BuildContext context) => TotalReservations(),
         },
       ),
     );
