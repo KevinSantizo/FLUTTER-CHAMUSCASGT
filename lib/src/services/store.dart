@@ -447,7 +447,7 @@ getReservationsToday(BuildContext context) {
     child: StreamBuilder<QuerySnapshot>(
       stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isEqualTo: DateTime.now().day).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+        if(snapshot.data.documents == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         if (snapshot.data.documents.isEmpty) {
           return Material(
             elevation: 3.0,
@@ -474,7 +474,7 @@ getReservationsToday(BuildContext context) {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 25.0),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
                     textColor: Colors.white,
                     color: myTheme.primaryColor,
                     onPressed: () => Navigator.pushNamed(context, 'search-companies'),
@@ -751,6 +751,128 @@ getPersonalInfo(BuildContext context){
 );
 }
 
+getFavorites(BuildContext context){
+  navigateToCompany(DocumentSnapshot ds) {
+    print(ds.data);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPage(
+        ds: ds,
+    )));
+    }
+  return Container(
+    width: double.infinity,
+    child: StreamBuilder<QuerySnapshot>(
+      stream: _databaseReference.collection('company').where('owner', whereIn: ['FDJ', 'Profut', 'SC', 'SportTown']).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 15.0),
+          child: ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (BuildContext context, int index){
+              final String _address = snapshot.data.documents[index]['address'];
+              final String _name    = snapshot.data.documents[index]['name'];
+              final String _city    = snapshot.data.documents[index]['city']; 
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                elevation: 3.0,
+                child: InkWell(
+                  onTap: () => navigateToCompany(snapshot.data.documents[index]),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                    margin: EdgeInsets.symmetric(horizontal: 5.0,),
+                    child: Column(
+                      children: <Widget>[
+                      FadeIn(
+                        duration: Duration(milliseconds: 1500),
+                        child: Stack(
+                          alignment: AlignmentDirectional.topEnd,
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5.0),
+                              child: Image(
+                                height: 220.0,
+                                width: double.infinity,
+                                image: NetworkImage(
+                                  snapshot.data.documents[index]['cover_photo'], 
+                                ), 
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              width: double.infinity,
+                              height: 220.0,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                              alignment: Alignment.topRight,
+                              child: Icon(FontAwesome.heart, color: Colors.white, size: 25.0),
+                            ),
+                          ],
+                        ),
+                      ), 
+                      SizedBox(height: 10.0),                               
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                              Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text('$_name', textScaleFactor: 1.3, style: GoogleFonts.ubuntu()),
+                                SizedBox(height: 5.0,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    // color: Colors.black.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(100.0)
+                                ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Icon(Feather.map_pin, color: Colors.grey, size: 15.0,),
+                                      VerticalDivider(width: 4.5),
+                                      Text('$_address, $_city', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey),),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Icon(
+                                  MdiIcons.arrowRightCircle,
+                                  color: Colors.black.withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              );
+            },
+          ),
+        );
+      },
+    ),
+
+  );
+
+}
 //////////////////// END Get info profile ////////////////////
 
 
@@ -762,7 +884,7 @@ getPastReservations(BuildContext context){
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').orderBy('day', descending: false).orderBy('schedule', descending: false).snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
          if (snapshot.data.documents?.isEmpty ?? false){
@@ -1003,7 +1125,7 @@ getPendingReservations(BuildContext context) {
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').orderBy('day', descending: false).orderBy('schedule', descending: false).snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').snapshots(),
       builder: (context, snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         final a = snapshot.data.documents;

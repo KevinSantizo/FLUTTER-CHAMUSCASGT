@@ -312,11 +312,6 @@ class _CompanyPageState extends State<CompanyPage> {
                                               borderRadius: BorderRadius.circular(10.0),
                                             ),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                                            alignment: Alignment.topRight,
-                                            child: Icon(FontAwesome.heart, color: Colors.white, size: 25.0),
-                                          ),
                                         ],
                                       ),
                                     ),
