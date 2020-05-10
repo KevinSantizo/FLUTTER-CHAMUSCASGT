@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Text(doc[index]['name'], textScaleFactor: 4.0, style:  GoogleFonts.acme(textStyle: TextStyle(color: Colors.white.withOpacity(0.7) ))),
-                            Text('Lugar perfecto para divertirse y pasarla bien', textScaleFactor: 1.3, style:  GoogleFonts.montserrat(textStyle: TextStyle(color: Colors.white.withOpacity(0.7)))),
+                            Text('Lugar perfecto para divertirse y pasarla bien', textScaleFactor: 1.3, style:  GoogleFonts.ubuntu(textStyle: TextStyle(color: Colors.white.withOpacity(0.7)))),
                             SizedBox(height: 20.0,),
                           ],
                         ),
@@ -179,7 +179,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                Text('Torneos', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold))
+                Text('Torneos', style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold))
               ],
             ),
             Column(
@@ -198,7 +198,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                Text('Express', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold))
+                Text('Express', style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold))
               ],
             ),
               Column(
@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                Text('Calendario', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold))
+                Text('Calendario', style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold))
               ],
             ),
               Column(
@@ -236,7 +236,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                Text('Equipos', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold))
+                Text('Equipos', style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold))
               ],
             ),
           ],

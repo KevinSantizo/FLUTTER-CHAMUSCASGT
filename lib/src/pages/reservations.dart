@@ -31,11 +31,11 @@ class _ReservationsState extends State<Reservations> {
               tabs: <Widget>[
                 Container(
                   padding: EdgeInsets.all(8.0),
-                  child: Text('Jugados', style: GoogleFonts.ubuntu()),
+                  child: Text('Pendientes', style: GoogleFonts.ubuntu()),
                 ),
                 Container(
                   padding: EdgeInsets.all(8.0),
-                  child: Text('Pendientes', style: GoogleFonts.ubuntu()),
+                  child: Text('Jugados', style: GoogleFonts.ubuntu()),
                 ),
                 Container(
                   padding: EdgeInsets.all(8.0),
@@ -46,8 +46,8 @@ class _ReservationsState extends State<Reservations> {
           ),
           body: TabBarView(
             children: <Widget>[
-              getPastReservations(context),
               getPendingReservations(context),
+              getPastReservations(context),
               getCancelledReservations(context)
             ],
           ),

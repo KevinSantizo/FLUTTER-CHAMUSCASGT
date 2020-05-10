@@ -18,7 +18,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(243,246,252, 1.0),
       appBar: AppBar(
-        title: Text('Perfil', textScaleFactor: 1.5, style: GoogleFonts.montserrat(color: Colors.black), ),
+        title: Text('Perfil', textScaleFactor: 1.5, style: GoogleFonts.ubuntu(color: Colors.black), ),
         automaticallyImplyLeading: false,
         centerTitle: false,
         elevation: 0.0,
@@ -59,7 +59,7 @@ class _ProfileState extends State<Profile> {
                                 child: Icon(Feather.calendar, size: 30.0, color: Color.fromRGBO(244,184,90, 1.0)),
                               ),
                               VerticalDivider(),
-                              Text('Mis reservas', textScaleFactor: 1.2, style: GoogleFonts.montserrat(), )
+                              Text('Mis reservas', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(), )
                             ],
                           ),
                           Icon(Feather.chevron_right, size: 30.0, color: Colors.grey)

@@ -181,7 +181,7 @@ getMostVisitedCompanies(BuildContext context){
                 child: Icon(MdiIcons.soccerField, size: 20.0,)
               ),
               VerticalDivider(width: 5.0,),
-              Text('Más visitadas', style: GoogleFonts.montserrat(textStyle:  TextStyle( fontSize: 20.0,)) ),
+              Text('Más visitadas', style: GoogleFonts.ubuntu(textStyle:  TextStyle( fontSize: 20.0,)) ),
             ],
           ),
         ),
@@ -247,7 +247,7 @@ getMostVisitedCompanies(BuildContext context){
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('$_name', textScaleFactor: 1.3, style: GoogleFonts.montserrat()),
+                                        Text('$_name', textScaleFactor: 1.3, style: GoogleFonts.ubuntu()),
                                         SizedBox(height: 5.0,),
                                         Container(
                                           decoration: BoxDecoration(
@@ -259,7 +259,7 @@ getMostVisitedCompanies(BuildContext context){
                                             children: <Widget>[
                                               Icon(Feather.map_pin, color: Colors.grey, size: 15.0,),
                                               VerticalDivider(width: 4.5),
-                                              Text('$_address, $_city', textScaleFactor: 1.1, style: TextStyle(color: Colors.grey),),
+                                              Text('$_address, $_city', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                             ],
                                           ),
                                         )
@@ -299,6 +299,7 @@ getMostVisitedCompanies(BuildContext context){
 }
 
 // Get best fields
+
 getTopCompanies(BuildContext context){
 
   navigateToCompany(DocumentSnapshot ds) {
@@ -321,7 +322,7 @@ getTopCompanies(BuildContext context){
             children: <Widget>[
               Image.asset('assets/ranking.png', height: 25.0),
               VerticalDivider(width: 5.0),
-              Text('Top', style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 20.0)),),
+              Text('Top', style: GoogleFonts.ubuntu(textStyle: TextStyle(fontSize: 20.0)),),
             ],
           ),
         ),
@@ -388,7 +389,7 @@ getTopCompanies(BuildContext context){
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('$_name', textScaleFactor: 1.3, style: GoogleFonts.montserrat()),
+                                        Text('$_name', textScaleFactor: 1.3, style: GoogleFonts.ubuntu()),
                                         SizedBox(height: 5.0,),
                                         Container(
                                           decoration: BoxDecoration(
@@ -400,7 +401,7 @@ getTopCompanies(BuildContext context){
                                             children: <Widget>[
                                               Icon(Feather.map_pin, color: Colors.grey, size: 15.0,),
                                               VerticalDivider(width: 4.5),
-                                              Text('$_address, $_city', textScaleFactor: 1.1, style: TextStyle(color: Colors.grey),),
+                                              Text('$_address, $_city', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey),),
                                             ],
                                           ),
                                         )
@@ -463,7 +464,7 @@ getReservationsToday(BuildContext context) {
                     children: <Widget>[
                       Icon(FontAwesome.soccer_ball_o),
                       VerticalDivider(width: 5.0),
-                      Text('Chamuscas de hoy', style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 20.0)),),
+                      Text('Chamuscas de hoy', style: GoogleFonts.ubuntu(textStyle: TextStyle(fontSize: 20.0)),),
                     ],
                   ),
                   SizedBox(height: 10.0,),
@@ -477,7 +478,7 @@ getReservationsToday(BuildContext context) {
                     textColor: Colors.white,
                     color: myTheme.primaryColor,
                     onPressed: () => Navigator.pushNamed(context, 'search-companies'),
-                    child: Text('Explorar canchas', textScaleFactor: 1.2, style: GoogleFonts.montserrat(), ),
+                    child: Text('Explorar canchas', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(), ),
                   )
                 ],
               ),
@@ -487,7 +488,7 @@ getReservationsToday(BuildContext context) {
           return Material(
             elevation: 3.0,
             child: Container(
-            padding: EdgeInsets.only(left: 15.0, top: 25.0, bottom: 25.0),
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 25.0),
             color: Colors.white,
             child: Column(
               children: <Widget>[
@@ -495,7 +496,7 @@ getReservationsToday(BuildContext context) {
                   children: <Widget>[
                     Image.asset('assets/ranking.png', height: 25.0),
                     VerticalDivider(width: 5.0),
-                    Text('Chamuscas de hoy', style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 20.0)),),
+                    Text('Chamuscas de hoy', style: GoogleFonts.ubuntu(textStyle: TextStyle(fontSize: 20.0)),),
                   ],
                 ),
                   CarouselSlider(
@@ -508,80 +509,95 @@ getReservationsToday(BuildContext context) {
                         return Builder(
                           builder: (BuildContext context){
                             return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Stack(
-                                        children: <Widget>[
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(10.0),
-                                            child: Image(
-                                              image: NetworkImage(doc.data['image_field_url']),
-                                              height: 120.0,
-                                              fit: BoxFit.cover,
-                                              width: 150.0,
+                              padding: EdgeInsets.symmetric(vertical: 2.0),
+                              child: Card(
+                                elevation: 3.0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Stack(
+                                          children: <Widget>[
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              child: Image(
+                                                image: NetworkImage(doc.data['image_field_url']),
+                                                height: 120.0,
+                                                fit: BoxFit.cover,
+                                                width: 170.0,
+                                              ),
                                             ),
-                                          ),
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                              Container(
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Text(doc.data['company'], style: GoogleFonts.ubuntu(color: Colors.white), ),
+                                                    Text(doc.data['address'], textScaleFactor: 0.8, style: GoogleFonts.ubuntu(color: Colors.white), ),
+                                                  ],
+                                                ),
+                                                height: 120.0,
+                                                width: 170.0,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  color: Colors.black.withOpacity(0.6)
+                                                ),
+                                              )
+                                          ],
+                                        ),
+                                        VerticalDivider(color: Colors.transparent, width: 5.0),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Icon(Feather.calendar, size: 20.0),
+                                                VerticalDivider(width: 5.0,),
+                                                Text('${doc.data['day']}-${doc.data['month']}-${doc.data['year']}', style: GoogleFonts.ubuntu())
+                                              ],
+                                            ),
+                                            SizedBox(height: 20.0,),
+                                            Row(
+                                              children: <Widget>[
+                                                Icon(Feather.clock, size: 20.0),
+                                                VerticalDivider(width: 5.0),
+                                                Text('${doc.data['schedule']}', style: GoogleFonts.ubuntu())
+                                              ],
+                                            ),
+                                            SizedBox(height: 20.0,),
+                                            Row(
+                                            // crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                                 children: <Widget>[
-                                                  Text(doc.data['company'], style: GoogleFonts.montserrat(color: Colors.white), ),
-                                                  Text(doc.data['address'], textScaleFactor: 0.8, style: GoogleFonts.montserrat(color: Colors.white), ),
+                                                  Image.asset('assets/futy.png', height: 25.0,),
+                                                  Text('${doc.data['type']}'.toString().substring(6), textScaleFactor: 1.2, style: GoogleFonts.ubuntu(),)
                                                 ],
                                               ),
-                                              height: 120.0,
-                                              width: 150.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10.0),
-                                                color: Colors.black.withOpacity(0.6)
-                                              ),
-                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10.0, top: 10.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Image(
+                                            image: NetworkImage(doc.data['logo_photo']),
+                                            height: 40.0,
+                                          ),
+                                          SizedBox(height: 10.0,),
+                                          Text(doc.data['owner'], textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),)
                                         ],
                                       ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Row(
-                                            children: <Widget>[
-                                              Icon(Feather.calendar, size: 20.0),
-                                              VerticalDivider(width: 5.0,),
-                                              Text('${doc.data['day']}-${doc.data['month']}-${doc.data['year']}')
-                                            ],
-                                          ),
-                                          SizedBox(height: 20.0,),
-                                          Row(
-                                            children: <Widget>[
-                                              Icon(Feather.clock, size: 20.0),
-                                              VerticalDivider(width: 5.0),
-                                              Text('${doc.data['schedule']}:00 PM')
-                                            ],
-                                          ),
-                                          SizedBox(height: 20.0,),
-                                          Row(
-                                            children: <Widget>[
-                                              Transform.rotate(
-                                                  angle: - pi * 0.5,
-                                                  child: Icon(MdiIcons.soccerField, size: 20.0,)
-                                                ),
-                                              VerticalDivider(width: 5.0),
-                                              Text('${doc.data['type']}')
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Image(
-                                    image: NetworkImage(doc.data['logo_photo']),
-                                    height: 40.0,
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }
@@ -630,7 +646,7 @@ getCompanies(BuildContext context) {
                     child: Icon(MdiIcons.soccerField, size: 20.0,)
                   ),
                   VerticalDivider(),
-                  Text('Encuentra tu cancha', textScaleFactor: 1.3, style: GoogleFonts.montserrat(color: Colors.black,)),
+                  Text('Encuentra tu cancha', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.black,)),
                 ],
               ),
             ),
@@ -667,7 +683,7 @@ getCompanies(BuildContext context) {
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.black.withOpacity(0.5),
                               ),
-                              child: Text(snapshot.data.documents[index]['name'], textScaleFactor: 1.2,  style: GoogleFonts.montserrat(color: Colors.white) ,), 
+                              child: Text(snapshot.data.documents[index]['name'], textScaleFactor: 1.2,  style: GoogleFonts.ubuntu(color: Colors.white) ,), 
                             )
                           ],
                         ), //just for testing, will fill with image later
@@ -709,7 +725,7 @@ getPersonalInfo(BuildContext context){
                 height: 150.0,
               ),
               SizedBox(height: 10.0,),
-              Text(snapshot.data['name'], textScaleFactor: 1.5, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold)),
+              Text(snapshot.data['name'], textScaleFactor: 1.5, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
               InkWell(
                 onTap: () async {
                   await _auth.signOut();
@@ -719,7 +735,7 @@ getPersonalInfo(BuildContext context){
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Cerrar sesión', style: GoogleFonts.montserrat(color: Colors.black) ,),
+                      Text('Cerrar sesión', style: GoogleFonts.ubuntu(color: Colors.black) ,),
                       VerticalDivider(color: Colors.transparent, width: 5.0,),
                       Icon(Feather.log_out, color: Colors.black, size: 20.0, ),
                     ],
@@ -746,7 +762,7 @@ getPastReservations(BuildContext context){
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isLessThan:  DateTime.now().day).snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').orderBy('day', descending: false).orderBy('schedule', descending: false).snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
          if (snapshot.data.documents?.isEmpty ?? false){
@@ -777,12 +793,12 @@ getPastReservations(BuildContext context){
           final doc = snapshot.data.documents;
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 5.0),
-              child: ListView(
-                children: <Widget>[
-                  if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,)),
-                  for (var item in doc)
-                  // if(item['schedule'] < TimeOfDay.now().hour)
-                    Container(
+              child: ListView.builder(
+                itemCount: doc.length,
+                itemBuilder: (BuildContext context, int index){
+                  if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+                  if((doc[index]['day'] < DateTime.now().day) || (doc[index]['day'] <= DateTime.now().day && doc[index]['schedule'] <= TimeOfDay.now().hour) )
+                  return Container(
                       child: Card(
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                         child: Padding(
@@ -795,7 +811,7 @@ getPastReservations(BuildContext context){
                                   ClipRRect(
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
                                     child: Image(
-                                      image: NetworkImage(item['image_field_url']),
+                                      image: NetworkImage(doc[index]['image_field_url']),
                                       fit: BoxFit.cover,
                                       height: MediaQuery.of(context).size.height * 0.25,
                                       width: double.infinity,
@@ -815,8 +831,8 @@ getPastReservations(BuildContext context){
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text('${item['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
-                                        Text(' ${item['type']}', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text('${doc[index]['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text(' ${doc[index]['type']}', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -826,7 +842,7 @@ getPastReservations(BuildContext context){
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
                                         Icon(Feather.clock, size: 20.0, color: Colors.white ),
-                                        Text(' ${item['schedule']}:00 PM', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text(' ${doc[index]['schedule']}:00 PM', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -856,7 +872,7 @@ getPastReservations(BuildContext context){
                                           children: <Widget>[
                                             Icon(Feather.map_pin, size: 20.0, color: Colors.grey),
                                             VerticalDivider(width: 3.0,),
-                                            Text(' ${item['address']}, ${item['city']}', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
+                                            Text(' ${doc[index]['address']}, ${doc[index]['city']}', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                           ],
                                         ),
                                         SizedBox(height: 5.0),
@@ -864,13 +880,13 @@ getPastReservations(BuildContext context){
                                           children: <Widget>[
                                             Icon(Feather.calendar, size: 20, color: Colors.grey,),
                                             VerticalDivider(width: 3.0,),
-                                            Text('${item['day']}-${item['month']}-${item['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                            Text('${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
                                           ],
                                         ),
                                       ],
                                     ),
                                     Image(
-                                      image: NetworkImage(item['logo_photo']),
+                                      image: NetworkImage(doc[index]['logo_photo']),
                                       height: 40.0,
                                     )
                                   ],
@@ -895,20 +911,20 @@ getPastReservations(BuildContext context){
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    item['ball'] || item['tshirt']  ? Padding(
+                                    doc[index]['ball'] || doc[index]['tshirt']  ? Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          item['tshirt'] ? Row(
+                                          doc[index]['tshirt'] ? Row(
                                             children: <Widget>[
                                               Icon(MdiIcons.tshirtCrew, size: 20),
                                               VerticalDivider(width: 3.0,),
-                                              Text('${item['tshirts_total']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                              Text('${doc[index]['tshirts_total']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
                                             ],
                                           ) : Container(),
                                           SizedBox(height: 5.0,),
-                                          item['ball'] ? Row(
+                                          doc[index]['ball'] ? Row(
                                             children: <Widget>[
                                               Icon(FontAwesome.soccer_ball_o, size: 20),
                                               VerticalDivider(width: 3.0,),
@@ -924,7 +940,7 @@ getPastReservations(BuildContext context){
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('Q${item['price']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                          Text('Q${doc[index]['price']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
                                         ],
                                       ),
                                     ),
@@ -940,7 +956,7 @@ getPastReservations(BuildContext context){
                               children: <Widget>[
                                 Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
                                 // VerticalDivider(width: 50.0,),
-                                Text('Q${item['total']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                Text('Q${doc[index]['total']}.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -948,9 +964,31 @@ getPastReservations(BuildContext context){
                       ),
                     ),        
                   ),
-                ) 
-              ],
-            ),
+                ); else
+                 return Container(
+                  margin: EdgeInsets.symmetric(vertical: 40.0),
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset('assets/bal3.jpg', height: 120.0, color: Colors.grey,),
+                      doc[index]['day'] == DateTime.now().day ? 
+                      Text('Partido de hoy ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : doc[index]['day'] == DateTime.now().day + 1 ? 
+                      Text('Partido de mañana ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}',  textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('Partido de fecha ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                      Text('Con horario de ${doc[index]['schedule']}:00 PM', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                      SizedBox(height: 13.0,),
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.orange),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: Text('Pendiente', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.orange))
+                      ),
+                    ],
+                  )
+                );
+                },
+
+              ),
           );
         }
       }
@@ -965,7 +1003,7 @@ getPendingReservations(BuildContext context) {
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isGreaterThanOrEqualTo: DateTime.now().day).snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').orderBy('day', descending: false).orderBy('schedule', descending: false).snapshots(),
       builder: (context, snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         final a = snapshot.data.documents;
@@ -1001,19 +1039,20 @@ getPendingReservations(BuildContext context) {
                 children: <Widget>[
                   if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,)),
                   for (var item in doc)
-                  // if(item['schedule'] > TimeOfDay.now().hour)
+                  if((item['day'] > DateTime.now().day) || (item['day'] >= DateTime.now().day && item['schedule'] > TimeOfDay.now().hour))
                     Container(
                       child: Card(
+                      elevation: 3.0,
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          padding: const EdgeInsets.symmetric(vertical: 0.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Stack(
                                 children: <Widget>[
                                   ClipRRect(
-                                    borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
                                     child: Image(
                                       image: NetworkImage(item['image_field_url']),
                                       fit: BoxFit.cover,
@@ -1025,7 +1064,7 @@ getPendingReservations(BuildContext context) {
                                     height: MediaQuery.of(context).size.height * 0.25,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),                             
+                                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
                                       color: Colors.black.withOpacity(0.6)
                                     ),
                                   ),
@@ -1036,7 +1075,6 @@ getPendingReservations(BuildContext context) {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
                                         Text('${item['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
-                                        Text(' ${item['type']}', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -1070,11 +1108,11 @@ getPendingReservations(BuildContext context) {
                                               width: 17.0,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: Colors.deepOrange
+                                                color: Colors.orange
                                               ),
                                             ),
                                             VerticalDivider(width: 6.0,),
-                                            Text('Pendiente', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            Text('Pendiente', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.orange))
                                           ],
                                         ),
                                         SizedBox(height: 5.0),
@@ -1091,14 +1129,31 @@ getPendingReservations(BuildContext context) {
                                           children: <Widget>[
                                             Icon(Feather.calendar, size: 20, color: Colors.grey,),
                                             VerticalDivider(width: 3.0,),
-                                            Text('${item['day']}-${item['month']}-${item['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                            item['day']  == DateTime.now().day ? 
+                                            Text('Hoy', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : item['day']  == DateTime.now().day + 1 ? 
+                                            Text('Mañana', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('${item['day']}-${item['month']}-${item['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0),
+                                        Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Image.asset('assets/futy.png', color: Colors.grey, height: 25.0,),
+                                            Text('${item['type']}'.toString().substring(6), textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey),)
                                           ],
                                         ),
                                       ],
                                     ),
-                                    Image(
-                                      image: NetworkImage(item['logo_photo']),
-                                      height: 40.0,
+                                    Column(
+                                      children: <Widget>[
+                                        Image(
+                                          image: NetworkImage(item['logo_photo']),
+                                          height: 40.0,
+                                        ),
+                                        SizedBox(height: 10.0,),
+                                        Text(item['owner'], textScaleFactor: 1.1, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold))
+                                      ],
                                     )
                                   ],
                                 ),
@@ -1171,6 +1226,8 @@ getPendingReservations(BuildContext context) {
                                   ],
                                 ),
                               ),
+                              Divider(),
+                              Divider(),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
                                 child: Row(
@@ -1261,6 +1318,28 @@ getPendingReservations(BuildContext context) {
                                                               )
                                                             );
                                                             await cancelReservation(item.documentID);
+                                                            await addCancelledReservation(
+                                                              item['address'],
+                                                              item['ball'],
+                                                              item['city'],
+                                                              item['company'],
+                                                              item['month'],
+                                                              item['day'],
+                                                              item['year'],
+                                                              item['measures'],
+                                                              item['name'],
+                                                              item['phone'],
+                                                              item['owner'],
+                                                              item['price'],
+                                                              item['logo_photo'],
+                                                              item['schedule'],
+                                                              item['total'],
+                                                              item['tshirt'],
+                                                              item['tshirts_total'],
+                                                              item['type'],
+                                                              item['image_field_url'],
+
+                                                            );
                                                           },
                                                           child: Text('Sí', textScaleFactor: 1.2, style: GoogleFonts.montserrat()),
                                                         )
@@ -1299,7 +1378,7 @@ getCancelledReservations(BuildContext context) {
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').where('status', isEqualTo: 'Cancelada').snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('cancelled').snapshots(),
       builder: (context, snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         final a = snapshot.data.documents;
@@ -1331,8 +1410,9 @@ getCancelledReservations(BuildContext context) {
                   final String  _city         = doc[i]['city'];
                   final String  _company      = doc[i]['company'];
                   final String  _type         = doc[i]['type'];
-                  final String  _schedule     = doc[i]['schedule'];
-                  final String  _status       = doc[i]['status'];
+                  final String  _name         = doc[i]['name'];
+                  final String  _image        = doc[i]['image_field_url'];
+                  final int     _schedule     = doc[i]['schedule'];
                   final bool    _ball         = doc[i]['ball'];
                   final bool    _tshirt       = doc[i]['tshirt'];
                   final int     _totalTshirt  = doc[i]['tshirts_total'];
@@ -1341,23 +1421,22 @@ getCancelledReservations(BuildContext context) {
                   final int     _year         = doc[i]['year'];
                   final int     _price        = doc[i]['price'];
                   final int     _total        = doc[i]['total'];
-                  
 
-
-                 return doc[i]['day'] >= DateTime.now().day ? Container(
+                 return Container(
                    child: Card(
+                     elevation: 3.0,
                      margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
                      child: Padding(
-                       padding: const EdgeInsets.symmetric(vertical: 15.0),
+                       padding: const EdgeInsets.only(bottom: 15.0),
                        child: Column(
                          crossAxisAlignment: CrossAxisAlignment.start,
                          children: <Widget>[
                            Stack(
                              children: <Widget>[
                                ClipRRect(
-                                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),                             
-                                 child: Image(
-                                   image: NetworkImage(doc[i]['image_field_url']),
+                                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
+                                  child: Image(
+                                   image: NetworkImage('$_image'),
                                    fit: BoxFit.cover,
                                    height: MediaQuery.of(context).size.height * 0.25,
                                    width: double.infinity,
@@ -1367,8 +1446,8 @@ getCancelledReservations(BuildContext context) {
                                  height: MediaQuery.of(context).size.height * 0.25,
                                  width: double.infinity,
                                  decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),                             
-                                   color: Colors.black.withOpacity(0.6)
+                                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
+                                   color: Colors.grey.withOpacity(0.3)
                                  ),
                                ),
                               Container(
@@ -1377,8 +1456,8 @@ getCancelledReservations(BuildContext context) {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Text(' $_company', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
-                                    Text(' $_type', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                    Text(' $_company', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.grey)),
+                                    Text(' $_name', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                   ],
                                 ),
                               ),
@@ -1387,8 +1466,8 @@ getCancelledReservations(BuildContext context) {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    Icon(Feather.clock, size: 20.0, color: Colors.white ),
-                                    Text(' $_schedule', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                    Icon(Feather.clock, size: 20.0, color: Colors.grey ),
+                                    Text(' ${_schedule}00:PM', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                   ],
                                 ),
                               ),
@@ -1409,7 +1488,7 @@ getCancelledReservations(BuildContext context) {
                                        children: <Widget>[
                                          Icon(Feather.x_square, size: 20, color: Colors.red),
                                          VerticalDivider(width: 6.0,),
-                                         Text('$_status', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                         Text('Cancelada', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.red, fontWeight: FontWeight.bold)),
                                        ],
                                      ),
                                      SizedBox(height: 5.0),
@@ -1426,7 +1505,18 @@ getCancelledReservations(BuildContext context) {
                                       children: <Widget>[
                                         Icon(Feather.calendar, size: 20, color: Colors.grey,),
                                         VerticalDivider(width: 3.0,),
-                                        Text('$_day-$_month-$_year', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                        _day == DateTime.now().day ? 
+                                            Text('Cancelado para hoy', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : _day  == DateTime.now().day + 1 ? 
+                                            Text('Cancelado para mañana', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('$_day-$_month-$_year}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.0),
+                                    Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image.asset('assets/futy.png', color: Colors.grey, height: 25.0,),
+                                        Text('$_type'.toString().substring(6), textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey),)
                                       ],
                                     ),
                                   ],
@@ -1444,9 +1534,9 @@ getCancelledReservations(BuildContext context) {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text('Extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                Text('Extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.grey)),
                                 // VerticalDivider(width: 50.0,),
-                                Text('Precio', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                Text('Precio', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -1466,7 +1556,7 @@ getCancelledReservations(BuildContext context) {
                                         children: <Widget>[
                                           Icon(MdiIcons.tshirtCrew, size: 20),
                                           VerticalDivider(width: 3.0,),
-                                          Text('$_totalTshirt', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                          Text('$_totalTshirt', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                         ],
                                       ) : Container(),
                                       SizedBox(height: 5.0,),
@@ -1474,19 +1564,19 @@ getCancelledReservations(BuildContext context) {
                                         children: <Widget>[
                                           Icon(FontAwesome.soccer_ball_o, size: 20),
                                           VerticalDivider(width: 3.0,),
-                                          Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                          Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                         ],
                                       ) : Container(),
                                     ],
                                   ),
-                                ) : Text('No tienes extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                ) : Text('No tienes extras', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                 VerticalDivider(width: 5.0, color: Colors.black ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text('Q$_price.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                      Text('Q$_price.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                     ],
                                   ),
                                 ),
@@ -1500,9 +1590,9 @@ getCancelledReservations(BuildContext context) {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                Text('Total', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.grey)),
                                 // VerticalDivider(width: 50.0,),
-                                Text('Q$_total.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                Text('Q$_total.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.grey)),
                               ],
                             ),
                           ),
@@ -1510,7 +1600,7 @@ getCancelledReservations(BuildContext context) {
                        ),
                      ),        
                    ),
-                 ) : Container ();
+                 );
                 },
               ),
             );
@@ -1523,11 +1613,56 @@ getCancelledReservations(BuildContext context) {
 //Cancel reservation
   cancelReservation(String idReservation) async {
   FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).updateData({
-    'status' : 'Cancelada'
-  });
+  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).delete();
 }
 
+Future<bool> addCancelledReservation(
+  String  addressR,
+  bool    isBallR,
+  String  cityR,
+  String  companyR,
+  int     month,
+  int     day,
+  int     year,
+  // String  descriptionR,
+  String  measuresR,
+  String  nameR,
+  String  phoneR,
+  String  ownerR,
+  int     priceR,
+  String  logoPhoto,
+  int     scheduleR,
+  int     totalR,
+  bool    isTshirtR,
+  int     totalTshirtR,
+  String  typeR,
+  String  urlImageR,
+) async {
+  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+
+  return await Firestore.instance.collection('users').document(currentUser.uid).collection('cancelled').document().setData({
+    'address'         : addressR,
+    'ball'            : isBallR,
+    'city'            : cityR,
+    'company'         : companyR,
+    'month'           : month,
+    'day'             : day,
+    'year'            : year,
+    // 'description'     : descriptionR,
+    'measures'        : measuresR,
+    'name'            : nameR,
+    'phone'           : phoneR,
+    'owner'           : ownerR,
+    'price'           : priceR,
+    'logo_photo'      : logoPhoto,
+    'schedule'        : scheduleR,
+    'total'           : totalR,
+    'tshirt'          : isTshirtR,
+    'tshirts_total'   : totalTshirtR,
+    'type'            : typeR,
+    'image_field_url' : urlImageR
+  }).then((result) => true ).catchError((err)=> false);
+}
 
 //Add reservations per user
 Future<bool> adReservationPerUser(
@@ -1538,11 +1673,11 @@ Future<bool> adReservationPerUser(
   int     month,
   int     day,
   int     year,
-
   // String  descriptionR,
   String  measuresR,
   String  nameR,
   String  phoneR,
+  String  ownerR,
   int     priceR,
   String  logoPhoto,
   int     scheduleR,
@@ -1566,6 +1701,7 @@ Future<bool> adReservationPerUser(
     'measures'        : measuresR,
     'name'            : nameR,
     'phone'           : phoneR,
+    'owner'           : ownerR,
     'price'           : priceR,
     'logo_photo'      : logoPhoto,
     'schedule'        : scheduleR,

@@ -78,9 +78,10 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   final db = Firestore.instance.collection('users').document();
 
   List<int> data = [5, 6, 7, 8, 9, 10, 11, 12 ];
-  int _date      = DateTime.now().hour;
-  int _date2     = TimeOfDay.now().hour;
-  int _date3     = DateTime.now().day;
+  int _hour      = TimeOfDay.now().hour;
+  int _date2     = DateTime.now().day;
+  int _date3     = TimeOfDay.now().hour;
+
 
 
   final List _imgDetail = [
@@ -671,11 +672,11 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
                         child: Center(
                           child: Wrap(
-                            alignment: WrapAlignment.spaceBetween,
+                            alignment: WrapAlignment.center,
                             spacing: 5.0,
                             children: <Widget>[
                               for (var item in data)
-                              if(_date < item + 12)
+                              if(_hour < item + 12)
                               ChoiceChip(
                                 shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
                                 label: Text('${item +12}:00 PM'), 
@@ -683,7 +684,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                   setState(() {
                                     schedule = value ? item + 12 : item = null;
                                     print(schedule);
-                                    print(_date);
+                                    print(_hour);
                                     _warningSchedule = '';
                                   });
                                 },
@@ -695,15 +696,16 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 ),
                               ),
                               backgroundColor: Colors.transparent,
-                              ) else if (day == DateTime.now().day + 1)
+                              ) 
+                              else if (day == DateTime.now().day + 1)
                               ChoiceChip(
                                 shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
                                 label: Text('${item +12}:00 PM'), 
                                 onSelected: (value) {   
                                   setState(() {
-                                    schedule = value ? item + 12 : item = null;
+                                    schedule = value ? item+ 12 :  item = null;
                                     print(schedule);
-                                    print(_date);
+                                    print(_hour);
                                     _warningSchedule = '';
                                   });
 
@@ -863,10 +865,13 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 month,
                                 day,
                                 year,
+                                // (item['day'] > DateTime.now().day) || (item['day'] >= DateTime.now().day && item['schedule'] > TimeOfDay.now().hour)
+                                
                                 //  widget.ds.data['description'],
                                 widget.ds.data['measures'],
                                 widget.ds.data['name'],
                                 widget.kd.data['phone'],
+                                widget.kd.data['owner'],
                                 widget.ds.data['price'],
                                 widget.kd.data['logo_photo'],
                                 schedule,

@@ -267,7 +267,7 @@ class _CompanyPageState extends State<CompanyPage> {
                               } ,
                               child: Column(
                                 children: <Widget>[
-                                Text(doc[i]['name'], textScaleFactor: 1.5, style: GoogleFonts.ubuntu(),),
+                                Text(doc[i]['name'], textScaleFactor: 1.5, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
                                   Container(
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -294,14 +294,17 @@ class _CompanyPageState extends State<CompanyPage> {
                                           Container(
                                             width: double.infinity,
                                             height: 230.0,
-                                            alignment: Alignment.center,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Image.asset('assets/futy.png', color: Colors.white, height: 40.0,),
-                                                SizedBox(height: 10.0,),
-                                                Text(doc[i]['type'].toString().substring(6), textScaleFactor: 1.5, style: GoogleFonts.ubuntu(color: Colors.white),)
-                                              ],
+                                            alignment: Alignment.topLeft,
+                                            child: Container(
+                                            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Image.asset('assets/futy.png', color: Colors.white, height: 40.0,),
+                                                  Text(doc[i]['type'].toString().substring(6), textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white),)
+                                                ],
+                                              ),
                                             ),
                                             // height: MediaQuery.of(context).size.height,
                                             decoration: BoxDecoration(
@@ -326,8 +329,7 @@ class _CompanyPageState extends State<CompanyPage> {
                     );
                   },
                 ),
-              )
-              
+              )   
             ),
           ],
         ),

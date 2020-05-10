@@ -81,10 +81,12 @@ class _TotalReservationsState extends State<TotalReservations> {
                    Container(
                      padding: EdgeInsets.all(10.0),
                      child: Card(
+                       elevation: 3.0,
                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                        ),
                        child: Row(
+                         crossAxisAlignment: CrossAxisAlignment.center,
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: <Widget>[
                            Row(
@@ -118,6 +120,7 @@ class _TotalReservationsState extends State<TotalReservations> {
                                     )
                                  ],
                                ),
+                               VerticalDivider(color: Colors.transparent, width: 5.0),
                                Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: <Widget>[
@@ -128,7 +131,7 @@ class _TotalReservationsState extends State<TotalReservations> {
                                        Text('${item['day']}-${item['month']}-${item['year']}')
                                      ],
                                    ),
-                                   SizedBox(height: 10.0,),
+                                   SizedBox(height: 20.0,),
                                    Row(
                                      children: <Widget>[
                                        Icon(Feather.clock, size: 20.0),
@@ -136,26 +139,30 @@ class _TotalReservationsState extends State<TotalReservations> {
                                        Text('${item['schedule']}')
                                      ],
                                    ),
-                                   SizedBox(height: 10.0,),
-                                   Row(
-                                     children: <Widget>[
-                                       Transform.rotate(
-                                          angle: - pi * 0.5,
-                                          child: Icon(MdiIcons.soccerField, size: 20.0,)
-                                        ),
-                                       VerticalDivider(width: 5.0),
-                                       Text('${item['type']}')
-                                     ],
-                                   )
+                                   SizedBox(height: 20.0,),
+                                  Row(
+                                  // crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image.asset('assets/futy.png', height: 25.0,),
+                                        Text('${item['type']}'.toString().substring(6), textScaleFactor: 1.2, style: GoogleFonts.ubuntu(),)
+                                      ],
+                                    ),
                                  ],
                                )
                              ],
                            ),
                            Padding(
-                             padding: const EdgeInsets.only(right: 5.0),
-                             child: Image(
-                               image: NetworkImage(item['logo_photo']),
-                               height: 40.0,
+                             padding: const EdgeInsets.only(right: 10.0, top: 10.0),
+                             child: Column(
+                               children: <Widget>[
+                                 Image(
+                                   image: NetworkImage(item['logo_photo']),
+                                   height: 40.0,
+                                 ),
+                                 SizedBox(height: 10.0,),
+                                 Text(item['owner'], textScaleFactor: 1.1, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),)
+                               ],
                              ),
                            )
                          ],
