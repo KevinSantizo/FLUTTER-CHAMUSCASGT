@@ -447,7 +447,7 @@ getReservationsToday(BuildContext context) {
     child: StreamBuilder<QuerySnapshot>(
       stream: _databaseReference.collection('users').document(user).collection('reservation').where('day', isEqualTo: DateTime.now().day).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-        if(snapshot.data.documents == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+        if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         if (snapshot.data.documents.isEmpty) {
           return Material(
             elevation: 3.0,
@@ -922,6 +922,7 @@ getPastReservations(BuildContext context){
                   if((doc[index]['day'] < DateTime.now().day) || (doc[index]['day'] <= DateTime.now().day && doc[index]['schedule'] <= TimeOfDay.now().hour) )
                   return Container(
                       child: Card(
+                        elevation: 3.0,
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -983,7 +984,7 @@ getPastReservations(BuildContext context){
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: <Widget>[
-                                            Icon(Feather.check_circle, size: 20, color: Colors.green),
+                                            Icon(Feather.check_square, size: 20, color: Colors.green),
                                             VerticalDivider(width: 6.0,),
                                             Text('Partido jugado', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
                                           ],
@@ -1088,12 +1089,12 @@ getPastReservations(BuildContext context){
                   ),
                 ); else
                  return Container(
-                  margin: EdgeInsets.symmetric(vertical: 40.0),
+                  margin: EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
                     children: <Widget>[
-                      Image.asset('assets/bal3.jpg', height: 120.0, color: Colors.grey,),
+                      Image.asset('assets/bal3.jpg', height: 80.0, color: Colors.grey,),
                       doc[index]['day'] == DateTime.now().day ? 
-                      Text('Partido de hoy ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : doc[index]['day'] == DateTime.now().day + 1 ? 
+                      Text('Partido de hoy', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : doc[index]['day'] == DateTime.now().day + 1 ? 
                       Text('Partido de mañana ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}',  textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('Partido de fecha ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
                       Text('Con horario de ${doc[index]['schedule']}:00 PM', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
                       SizedBox(height: 13.0,),
@@ -1107,9 +1108,8 @@ getPastReservations(BuildContext context){
                       ),
                     ],
                   )
-                );
+                  );
                 },
-
               ),
           );
         }
@@ -1482,7 +1482,24 @@ getPendingReservations(BuildContext context) {
                           ),
                         ),        
                       ),
-                  ) 
+                  ) else
+                   Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset('assets/bal3.jpg', height: 80.0, color: Colors.grey,),
+                        SizedBox(height: 13.0,),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.green),
+                            borderRadius: BorderRadius.circular(10.0)
+                          ),
+                          child: Icon(Feather.check_square, size: 20, color: Colors.green)
+                        ),
+                      ],
+                    )
+                  )
                 ],
               ),
             );

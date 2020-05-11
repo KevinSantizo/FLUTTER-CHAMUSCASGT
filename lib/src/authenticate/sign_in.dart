@@ -62,7 +62,7 @@ class _SignInState extends State<SignIn> {
                   child: IconButton(
                     color: myTheme.primaryColor,
                     iconSize: 28.0,
-                    icon: Icon(Feather.x), onPressed: () {}
+                    icon: Icon(Feather.x), onPressed: () => Navigator.popAndPushNamed(context, 'landing')
                   ),
                 ),
                 SizedBox(height: 70.0,),

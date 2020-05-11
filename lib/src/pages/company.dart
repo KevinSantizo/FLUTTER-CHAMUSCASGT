@@ -3,11 +3,16 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:latlong/latlong.dart';
+import 'package:newsport/src/components/lang.dart';
 import 'package:newsport/src/pages/detail_field.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+
+import '../components/theme.dart';
+import '../components/theme.dart';
 
 class CompanyPage extends StatefulWidget {
   final DocumentSnapshot ds;
@@ -16,15 +21,14 @@ class CompanyPage extends StatefulWidget {
   _CompanyPageState createState() => _CompanyPageState();
 } 
 
-final databaseReference = Firestore.instance;
-bool isLoaded = true;
-final _color = Color.fromRGBO(234,97,124, 1.0);
-dynamic _documentsLength; 
 
 
 class _CompanyPageState extends State<CompanyPage> {
 
-  
+  final databaseReference = Firestore.instance;
+  bool isLoaded = true;
+  dynamic _documentsLength; 
+  final map = new MapController();
   navigateToDetail(DocumentSnapshot ds, DocumentSnapshot kd) {
     Navigator.push(
       context,
@@ -34,6 +38,8 @@ class _CompanyPageState extends State<CompanyPage> {
         kd: kd,
     )));
   }
+
+  Lang scan;
   
   @override
   Widget build(BuildContext context) {
@@ -312,6 +318,11 @@ class _CompanyPageState extends State<CompanyPage> {
                                               borderRadius: BorderRadius.circular(10.0),
                                             ),
                                           ),
+                                          // Container(
+                                          //   margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                          //   alignment: Alignment.topRight,
+                                          //   child: Icon(FontAwesome.heart, color: Colors.white, size: 25.0),
+                                          // ),
                                         ],
                                       ),
                                     ),
@@ -332,7 +343,7 @@ class _CompanyPageState extends State<CompanyPage> {
             child: DraggableScrollableSheet(
             initialChildSize: 0.1,
             minChildSize: 0.1,
-            maxChildSize: 0.9,
+            maxChildSize: 0.68,
             builder: (BuildContext context, _scrollController){
               return Material(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
@@ -359,104 +370,19 @@ class _CompanyPageState extends State<CompanyPage> {
                             SizedBox(height: 20.0,),       
                             Container(
                               alignment: Alignment.topLeft,
-                              child: Text('Contacto', textScaleFactor: 2.0, style: GoogleFonts.montserrat(), ),
+                              child: Row(
+                                children: <Widget>[
+                                  Text('Mapa', textScaleFactor: 2.0, style: GoogleFonts.montserrat(), ),
+                                  VerticalDivider(width: 5.0),
+                                  Image.asset('assets/map.png', height: 35.0,),
+                                ],
+                              ),
                             ),
-                            Divider(),
                             SizedBox(height: 20.0,),       
-                            SvgPicture.asset('assets/contactus.svg', height: MediaQuery.of(context).size.height * 0.2),
+                            _createFlutterMap(),
                             SizedBox(height: 20.0,),       
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Text('Nombre: ', textScaleFactor: 1.3, style: GoogleFonts.montserrat(),),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                                  child: TextFormField(
-                                    validator: (val) => val.isEmpty ? 'Ingrese un nombre' : null,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      filled: true,
-                                      labelStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
-                                      hintStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15.0, color: Colors.grey))
-                                    ),
-                                  ),
-                                ),
-                                Text('Email: ', textScaleFactor: 1.3, style: GoogleFonts.montserrat(),),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                                  child: TextFormField(
-                                    validator: (val) => val.isEmpty ? 'Ingrese un nombre' : null,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      filled: true,
-                                      labelStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
-                                      hintStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15.0, color: Colors.grey))
-                                    ),
-                                  ),
-                                ),
-                                Text('Dudas o sugerencias: ', textScaleFactor: 1.3, style: GoogleFonts.montserrat(),),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                                  child: TextFormField(
-                                    maxLines: 8,
-                                    validator: (val) => val.isEmpty ? 'Ingrese un nombre' : null,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: _color),
-                                        borderRadius: BorderRadius.circular(10.0)
-                                      ),
-                                      filled: true,
-                                      labelStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15, color: Colors.grey)),
-                                      hintStyle: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 15.0, color: Colors.grey))
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0,),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                                  color: Color(0XFFF50057),
-                                  textColor: Colors.white,
-                                  onPressed: (){}, 
-                                  child: Text('Enviar',textScaleFactor: 1.5, style: GoogleFonts.montserrat(),)
-                                )
-                              ],
-                            )
+                            Divider(height: 20.0,),
+                            _moreInfo(),
                           ],
                         ),
                       ),
@@ -470,4 +396,70 @@ class _CompanyPageState extends State<CompanyPage> {
       )
     );
   }
+
+  Widget _createFlutterMap() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: 400.0,
+          child: FlutterMap(
+            mapController: map,
+            options: MapOptions(
+              center: LatLng(14.6407204, -90.5132675),
+              zoom: 15.0,
+            ),
+            layers: [
+              _createMap(),
+              _createMarker()
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  _createMap() {
+
+    return TileLayerOptions(
+      urlTemplate: 'https://api.mapbox.com/v4/'
+      '{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}',
+      additionalOptions: {
+        'accessToken' : 'pk.eyJ1Ijoia2V2aW5kZWxlb24xMCIsImEiOiJja2ExbW92amEwMmN0M21taG90dHpscG05In0.vJDpRWW1SZmLR2K2OAOuNA',
+        'id'          : 'mapbox.dark'      
+      }
+    );
+
+  }
+
+  _createMarker() {
+    return MarkerLayerOptions(
+      markers: <Marker>[
+        Marker(
+          width: 100.0,
+          height: 100.0,
+          point: LatLng(14.6407204, -90.5132675),
+          builder: ( context ) => Container(
+            child: Icon( 
+              Icons.location_on, 
+              size: 50.0,
+              color: Theme.of(context).primaryColor,
+              ),
+          )
+        )
+      ]
+    );
+  }
+
+ Widget _moreInfo() {
+   return Container(
+    child: Row(
+      // crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Text('¡Estamos cera de ti!', textScaleFactor: 1.7, style: GoogleFonts.ubuntu() ),
+        VerticalDivider(width: 6.0),
+        Icon(Feather.map_pin, color: myTheme.primaryColor, size: 20.0)
+      ],
+    ),
+   );
+ }
 }

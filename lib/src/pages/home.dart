@@ -20,7 +20,6 @@ class _HomeState extends State<Home> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final dataBaseReference = Firestore.instance;
-  SwiperController _scrollController;
 
   navigateToCompany(DocumentSnapshot ds) {
     print(ds.data);
@@ -98,7 +97,7 @@ class _HomeState extends State<Home> {
               if(snapshot.hasData) {
                 final  doc = snapshot.data.documents;
                 return Swiper(
-                  controller: _scrollController,
+                  // controller: _scrollController,
                   pagination: SwiperPagination(
                   margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                   alignment: Alignment.bottomRight,

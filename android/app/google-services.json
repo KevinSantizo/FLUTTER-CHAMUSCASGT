@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "832251651104",
+    "firebase_url": "https://booking-app-b73a6.firebaseio.com",
+    "project_id": "booking-app-b73a6",
+    "storage_bucket": "booking-app-b73a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832251651104:android:197c7f0d8bb15f022ec845",
+        "android_client_info": {
+          "package_name": "com.kevins.newsport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832251651104-0jio1k55pjovsmchn9q2pqvucmf8agt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG_pCBYRKDFcxQ0MXTzdzvCBc22hEzzYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832251651104-0jio1k55pjovsmchn9q2pqvucmf8agt3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "832251651104-5khe40ltbnpuastdohb2nsddbbmvsand.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kevins.newsport"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
