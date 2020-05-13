@@ -1,11 +1,9 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 
@@ -131,7 +129,7 @@ class _TotalReservationsState extends State<TotalReservations> {
                                        Text('${item['day']}-${item['month']}-${item['year']}')
                                      ],
                                    ),
-                                   SizedBox(height: 20.0,),
+                                   SizedBox(height: 5.0,),
                                    Row(
                                      children: <Widget>[
                                        Icon(Feather.clock, size: 20.0),
@@ -139,13 +137,29 @@ class _TotalReservationsState extends State<TotalReservations> {
                                        Text('${item['schedule']}')
                                      ],
                                    ),
-                                   SizedBox(height: 20.0,),
+                                   SizedBox(height: 5.0,),
                                   Row(
                                   // crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
                                         Image.asset('assets/futy.png', height: 25.0,),
                                         Text('${item['type']}'.toString().substring(6), textScaleFactor: 1.2, style: GoogleFonts.ubuntu(),)
+                                      ],
+                                    ),
+                                   SizedBox(height: 5.0,),
+                                    Row(
+                                  // crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          height: 17.0,
+                                          width: 17.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color:  item['status'] == 'Pendiente' ? Colors.orange : item['status'] == 'Jugado' ? Colors.green : Colors.red
+                                          ),
+                                        ),
+                                        Text('${item['status']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(),)
                                       ],
                                     ),
                                  ],

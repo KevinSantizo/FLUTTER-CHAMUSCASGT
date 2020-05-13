@@ -68,7 +68,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   int     counterTshirt     = 5;
   int     total             = 0;
   int     month;
-  int     day;
+  int     day = DateTime.now().day;
   int     year;
 
  
@@ -77,10 +77,9 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   String _warningSchedule = '';
   final db = Firestore.instance.collection('users').document();
 
-  List<int> data = [5, 6, 7, 8, 9, 10, 11, 12 ];
+  List<int> data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
   int _hour      = TimeOfDay.now().hour;
-  int _date2     = DateTime.now().day;
-  int _date3     = TimeOfDay.now().hour;
+
 
 
 
@@ -697,15 +696,17 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                               ),
                               backgroundColor: Colors.transparent,
                               ) 
-                              else if (day == DateTime.now().day + 1)
+                              else if (
+                                day == DateTime.now().day + 1 || day == DateTime.now().day + 2  || day == DateTime.now().day + 3
+                                 || day == DateTime.now().day + 4  || day == DateTime.now().day + 5  || day == DateTime.now().day + 6
+                                  || day == DateTime.now().day + 7  || day == DateTime.now().day + 8  || day == DateTime.now().day + 9 
+                              )
                               ChoiceChip(
                                 shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
                                 label: Text('${item +12}:00 PM'), 
                                 onSelected: (value) {   
                                   setState(() {
                                     schedule = value ? item+ 12 :  item = null;
-                                    print(schedule);
-                                    print(_hour);
                                     _warningSchedule = '';
                                   });
 
@@ -865,7 +866,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 month,
                                 day,
                                 year,
-                                // (item['day'] > DateTime.now().day) || (item['day'] >= DateTime.now().day && item['schedule'] > TimeOfDay.now().hour)
+                                (day > DateTime.now().day) || (day >= DateTime.now().day && schedule > TimeOfDay.now().hour) ? 'Pendiente' : 'Jugado',
                                 
                                 //  widget.ds.data['description'],
                                 widget.ds.data['measures'],
@@ -884,40 +885,55 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                               Navigator.pop(context);
                               showDialog(
                                 context: context,
-                                builder: (context) => AlertDialog(
-                                  // title: Text('${bloc.username}'),
-                                  content: Row(
-                                    children: <Widget>[
-                                      Text('Reservación creada con éxito'),
-                                      SizedBox(width: 10.0,),
-                                      Icon(MdiIcons.checkCircleOutline, color: Colors.green,)
-                                    ],
+                                builder: (context) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)
                                   ),
-                                   actions: <Widget>[
-                                    FlatButton(
-                                      child: Text(
-                                        'Ok',
-                                        style: TextStyle(
-                                          color: myTheme.primaryColor,
+                                  // title: Text('${bloc.username}'),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text('¡Reservación exitosa!', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                            SizedBox(width: 10.0,),
+                                            Icon(Feather.check_square, color: Colors.green,)
+                                          ],
                                         ),
-                                      ),
-                                      onPressed: () async {
-                                        if (_controller.isDismissed) {
-                                          _controller.forward(); 
-                                          _text =  'Cancelar';
-                                        } else if (_controller.isCompleted){
-                                          _controller.reverse();
-                                          _text =  'Reservar';
-                                          newDate = '';
-                                          schedule          = null;
-                                          ballValue         = false;  
-                                          scheduleValue     = false;
-                                          tShirtValue       = false;
-                                        }
-                                        Navigator.pop(context);                                        
-                                      },
+                                        SizedBox(height: 40.0,),
+                                        FlatButton(
+                                          padding: EdgeInsets.all(20.0),
+                                          color: Colors.green.withOpacity(0.1),
+                                          child: Text(
+                                            'Ok',
+                                            textScaleFactor: 1.3,
+                                            style: GoogleFonts.ubuntu(color: myTheme.primaryColor),
+                                          ),
+                                          onPressed: (){
+                                            setState(() {
+                                              if (_controller.isDismissed) {
+                                                _controller.forward(); 
+                                                _text =  'Cancelar';
+                                              } else if (_controller.isCompleted){
+                                                _controller.reverse();
+                                                _text =  'Reservar';
+                                                newDate = '';
+                                                schedule          = null;
+                                                ballValue         = false;  
+                                                scheduleValue     = false;
+                                                tShirtValue       = false;
+                                              }
+                                            });
+                                            Navigator.pop(context);
+                                          }
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 )
                               );
                             }

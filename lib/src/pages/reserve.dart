@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +10,6 @@ class Reserve extends StatefulWidget {
 
 class _ReserveState extends State<Reserve> {
 
-  final _databaseReference = Firestore.instance; 
 
 
   @override

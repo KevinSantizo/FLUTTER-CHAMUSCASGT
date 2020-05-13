@@ -42,7 +42,7 @@ class _SignInState extends State<SignIn> {
           children: <Widget>[
             Text('¿Aún no tienes cuenta?'),
             FlatButton(
-              child: Text('Crear una cuenta'),
+              child: Text('Crear una cuenta', style: TextStyle(color: Colors.lightBlue),),
               onPressed: () {
                 widget.toogleViews();
               },

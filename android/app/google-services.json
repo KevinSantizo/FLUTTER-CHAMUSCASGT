@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:832251651104:android:197c7f0d8bb15f022ec845",
+        "mobilesdk_app_id": "1:832251651104:android:6eb6ecd55ed0810d2ec845",
         "android_client_info": {
-          "package_name": "com.kevins.newsport"
+          "package_name": "com.example.newsport"
         }
       },
       "oauth_client": [

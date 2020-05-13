@@ -12,7 +12,6 @@ import 'package:newsport/src/pages/detail_field.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../components/theme.dart';
-import '../components/theme.dart';
 
 class CompanyPage extends StatefulWidget {
   final DocumentSnapshot ds;
@@ -455,7 +454,7 @@ class _CompanyPageState extends State<CompanyPage> {
     child: Row(
       // crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        Text('¡Estamos cera de ti!', textScaleFactor: 1.7, style: GoogleFonts.ubuntu() ),
+        Text('¡Estamos cerca de ti!', textScaleFactor: 1.7, style: GoogleFonts.ubuntu() ),
         VerticalDivider(width: 6.0),
         Icon(Feather.map_pin, color: myTheme.primaryColor, size: 20.0)
       ],

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:loading/loading.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsport/src/components/theme.dart';
 import 'package:newsport/src/models/user.dart';
@@ -884,7 +886,7 @@ getPastReservations(BuildContext context){
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('status', isEqualTo: 'Jugado').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
          if (snapshot.data.documents?.isEmpty ?? false){
@@ -919,7 +921,7 @@ getPastReservations(BuildContext context){
                 itemCount: doc.length,
                 itemBuilder: (BuildContext context, int index){
                   if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
-                  if((doc[index]['day'] < DateTime.now().day) || (doc[index]['day'] <= DateTime.now().day && doc[index]['schedule'] <= TimeOfDay.now().hour) )
+                  // if((doc[index]['day'] < DateTime.now().day) || (doc[index]['day'] <= DateTime.now().day && doc[index]['schedule'] <= TimeOfDay.now().hour) )
                   return Container(
                       child: Card(
                         elevation: 3.0,
@@ -986,7 +988,7 @@ getPastReservations(BuildContext context){
                                           children: <Widget>[
                                             Icon(Feather.check_square, size: 20, color: Colors.green),
                                             VerticalDivider(width: 6.0,),
-                                            Text('Partido jugado', textScaleFactor: 1.2, style: GoogleFonts.ubuntu()),
+                                            Text('Partido jugado', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.green))
                                           ],
                                         ),
                                         SizedBox(height: 5.0),
@@ -1003,7 +1005,9 @@ getPastReservations(BuildContext context){
                                           children: <Widget>[
                                             Icon(Feather.calendar, size: 20, color: Colors.grey,),
                                             VerticalDivider(width: 3.0,),
-                                            Text('${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
+                                            doc[index]['day']  == DateTime.now().day ? 
+                                            Text('Hoy', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : doc[index]['day']  == DateTime.now().day - 1 ? 
+                                            Text('Mañana', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
                                           ],
                                         ),
                                       ],
@@ -1087,30 +1091,9 @@ getPastReservations(BuildContext context){
                       ),
                     ),        
                   ),
-                ); else
-                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset('assets/bal3.jpg', height: 80.0, color: Colors.grey,),
-                      doc[index]['day'] == DateTime.now().day ? 
-                      Text('Partido de hoy', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : doc[index]['day'] == DateTime.now().day + 1 ? 
-                      Text('Partido de mañana ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}',  textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)) : Text('Partido de fecha ${doc[index]['day']}-${doc[index]['month']}-${doc[index]['year']}', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
-                      Text('Con horario de ${doc[index]['schedule']}:00 PM', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey,)),
-                      SizedBox(height: 13.0,),
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.orange),
-                          borderRadius: BorderRadius.circular(10.0)
-                        ),
-                        child: Text('Pendiente', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.orange))
-                      ),
-                    ],
-                  )
-                  );
-                },
-              ),
+                );
+              },
+            ),
           );
         }
       }
@@ -1125,7 +1108,7 @@ getPendingReservations(BuildContext context) {
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('reservation').snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('status', isEqualTo: 'Pendiente').snapshots(),
       builder: (context, snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         final a = snapshot.data.documents;
@@ -1161,7 +1144,7 @@ getPendingReservations(BuildContext context) {
                 children: <Widget>[
                   if(doc == null) Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,)),
                   for (var item in doc)
-                  if((item['day'] > DateTime.now().day) || (item['day'] >= DateTime.now().day && item['schedule'] > TimeOfDay.now().hour))
+                  // if((item['day'] > DateTime.now().day) || (item['day'] >= DateTime.now().day && item['schedule'] > TimeOfDay.now().hour))
                     Container(
                       child: Card(
                       elevation: 3.0,
@@ -1178,12 +1161,12 @@ getPendingReservations(BuildContext context) {
                                     child: Image(
                                       image: NetworkImage(item['image_field_url']),
                                       fit: BoxFit.cover,
-                                      height: MediaQuery.of(context).size.height * 0.25,
+                                      height: MediaQuery.of(context).size.height * 0.23,
                                       width: double.infinity,
                                     ),
                                   ),
                                   Container(
-                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    height: MediaQuery.of(context).size.height * 0.23,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
@@ -1191,12 +1174,13 @@ getPendingReservations(BuildContext context) {
                                     ),
                                   ),
                                   Container(
-                                    height: MediaQuery.of(context).size.height * 0.25,
+                                    height: MediaQuery.of(context).size.height * 0.23,
                                     width: double.infinity,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
                                         Text('${item['company']}', textScaleFactor: 1.7, style: GoogleFonts.ubuntu(color: Colors.white)),
+                                        Text('${item['name']}', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.white)),
                                       ],
                                     ),
                                   ),
@@ -1357,7 +1341,7 @@ getPendingReservations(BuildContext context) {
                                   children: <Widget>[
                                     FlatButton(
                                       child: Padding(
-                                        padding: EdgeInsets.all(10.0),
+                                        padding: EdgeInsets.all(8.0),
                                         child: Text('Cancelar', textScaleFactor: 1.2,  style: GoogleFonts.montserrat() ),
                                       ),
                                       shape: RoundedRectangleBorder(
@@ -1440,28 +1424,6 @@ getPendingReservations(BuildContext context) {
                                                               )
                                                             );
                                                             await cancelReservation(item.documentID);
-                                                            await addCancelledReservation(
-                                                              item['address'],
-                                                              item['ball'],
-                                                              item['city'],
-                                                              item['company'],
-                                                              item['month'],
-                                                              item['day'],
-                                                              item['year'],
-                                                              item['measures'],
-                                                              item['name'],
-                                                              item['phone'],
-                                                              item['owner'],
-                                                              item['price'],
-                                                              item['logo_photo'],
-                                                              item['schedule'],
-                                                              item['total'],
-                                                              item['tshirt'],
-                                                              item['tshirts_total'],
-                                                              item['type'],
-                                                              item['image_field_url'],
-
-                                                            );
                                                           },
                                                           child: Text('Sí', textScaleFactor: 1.2, style: GoogleFonts.montserrat()),
                                                         )
@@ -1474,31 +1436,76 @@ getPendingReservations(BuildContext context) {
                                           }
                                         );
                                       },
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),        
-                      ),
-                  ) else
-                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 20.0),
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset('assets/bal3.jpg', height: 80.0, color: Colors.grey,),
-                        SizedBox(height: 13.0,),
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            // border: Border.all(color: Colors.green),
-                            borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Icon(Feather.check_square, size: 20, color: Colors.green)
+                                    ),
+                                    RaisedButton(
+                                      // if((doc[index]['day'] < DateTime.now().day) || (doc[index]['day'] <= DateTime.now().day && doc[index]['schedule'] <= TimeOfDay.now().hour) )
+                                      onPressed: 
+                                      (item['day'] < DateTime.now().day) || (item['day'] <= DateTime.now().day && item['schedule'] <= TimeOfDay.now().hour) ?
+                                      () async {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => Center(
+                                            child: Loading(indicator: BallPulseIndicator(), size: 70.0,color: Colors.white)
+                                          )
+                                        );
+                                        await markMatchAsPlayed(item.documentID);
+                                        Navigator.pop(context);
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => Dialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(20.0)
+                                            ),
+                                            // title: Text('${bloc.username}'),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 20.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Text('¡Partido Jugado!', textScaleFactor: 1.3, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+                                                      SizedBox(width: 10.0,),
+                                                      Icon(FontAwesome.soccer_ball_o, color: Colors.green,)
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 50.0,),
+                                                  FlatButton(
+                                                    padding: EdgeInsets.all(20.0),
+                                                    color: Colors.green.withOpacity(0.1),
+                                                    child: Text(
+                                                      'Ok',
+                                                      textScaleFactor: 1.3,
+                                                      style: GoogleFonts.ubuntu(color: myTheme.primaryColor),
+                                                    ),
+                                                    onPressed: () => Navigator.pop(context)
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        );
+                                      } : 
+                                      null, 
+                                      child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Jugado', textScaleFactor: 1.2,  style: GoogleFonts.montserrat() ),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)
+                                    ),
+                                    textColor: Colors.white,
+                                    color: Colors.lightGreen,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    )
+                      ),        
+                    ),
                   )
                 ],
               ),
@@ -1517,7 +1524,7 @@ getCancelledReservations(BuildContext context) {
     alignment: Alignment.bottomCenter,
     width: double.infinity,
       child: StreamBuilder<QuerySnapshot>(
-      stream: _databaseReference.collection('users').document(user).collection('cancelled').snapshots(),
+      stream: _databaseReference.collection('users').document(user).collection('reservation').where('status', isEqualTo: 'Cancelado').snapshots(),
       builder: (context, snapshot) {
         if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
         final a = snapshot.data.documents;
@@ -1586,7 +1593,7 @@ getCancelledReservations(BuildContext context) {
                                  width: double.infinity,
                                  decoration: BoxDecoration(
                                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),                             
-                                   color: Colors.grey.withOpacity(0.3)
+                                   color: Colors.black.withOpacity(0.6)
                                  ),
                                ),
                               Container(
@@ -1627,7 +1634,7 @@ getCancelledReservations(BuildContext context) {
                                        children: <Widget>[
                                          Icon(Feather.x_square, size: 20, color: Colors.red),
                                          VerticalDivider(width: 6.0,),
-                                         Text('Cancelada', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(color: Colors.red, fontWeight: FontWeight.bold)),
+                                        Text('Cancelada', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.red))
                                        ],
                                      ),
                                      SizedBox(height: 5.0),
@@ -1693,7 +1700,7 @@ getCancelledReservations(BuildContext context) {
                                     children: <Widget>[
                                       _tshirt ? Row(
                                         children: <Widget>[
-                                          Icon(MdiIcons.tshirtCrew, size: 20),
+                                          Icon(MdiIcons.tshirtCrew, size: 20, color: Colors.grey),
                                           VerticalDivider(width: 3.0,),
                                           Text('$_totalTshirt', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                         ],
@@ -1701,7 +1708,7 @@ getCancelledReservations(BuildContext context) {
                                       SizedBox(height: 5.0,),
                                       _ball ? Row(
                                         children: <Widget>[
-                                          Icon(FontAwesome.soccer_ball_o, size: 20),
+                                          Icon(FontAwesome.soccer_ball_o, size: 20, color: Colors.grey),
                                           VerticalDivider(width: 3.0,),
                                           Text('+Q20.00', textScaleFactor: 1.2, style: GoogleFonts.ubuntu(color: Colors.grey)),
                                         ],
@@ -1750,57 +1757,22 @@ getCancelledReservations(BuildContext context) {
   }
 
 //Cancel reservation
-  cancelReservation(String idReservation) async {
+cancelReservation(String idReservation) async {
   FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).delete();
+  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).updateData(
+   {
+     'status' : 'Cancelado'
+   } 
+  );
 }
 
-Future<bool> addCancelledReservation(
-  String  addressR,
-  bool    isBallR,
-  String  cityR,
-  String  companyR,
-  int     month,
-  int     day,
-  int     year,
-  // String  descriptionR,
-  String  measuresR,
-  String  nameR,
-  String  phoneR,
-  String  ownerR,
-  int     priceR,
-  String  logoPhoto,
-  int     scheduleR,
-  int     totalR,
-  bool    isTshirtR,
-  int     totalTshirtR,
-  String  typeR,
-  String  urlImageR,
-) async {
+markMatchAsPlayed(String idReservation) async {
   FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-
-  return await Firestore.instance.collection('users').document(currentUser.uid).collection('cancelled').document().setData({
-    'address'         : addressR,
-    'ball'            : isBallR,
-    'city'            : cityR,
-    'company'         : companyR,
-    'month'           : month,
-    'day'             : day,
-    'year'            : year,
-    // 'description'     : descriptionR,
-    'measures'        : measuresR,
-    'name'            : nameR,
-    'phone'           : phoneR,
-    'owner'           : ownerR,
-    'price'           : priceR,
-    'logo_photo'      : logoPhoto,
-    'schedule'        : scheduleR,
-    'total'           : totalR,
-    'tshirt'          : isTshirtR,
-    'tshirts_total'   : totalTshirtR,
-    'type'            : typeR,
-    'image_field_url' : urlImageR
-  }).then((result) => true ).catchError((err)=> false);
+  return _databaseReference.collection('users').document(currentUser.uid).collection('reservation').document(idReservation).updateData(
+   {
+     'status' : 'Jugado'
+   } 
+  );
 }
 
 //Add reservations per user
@@ -1812,7 +1784,7 @@ Future<bool> adReservationPerUser(
   int     month,
   int     day,
   int     year,
-  // String  descriptionR,
+  String  statusR,
   String  measuresR,
   String  nameR,
   String  phoneR,
@@ -1836,7 +1808,7 @@ Future<bool> adReservationPerUser(
     'month'           : month,
     'day'             : day,
     'year'            : year,
-    // 'description'     : descriptionR,
+    'status'          : statusR,
     'measures'        : measuresR,
     'name'            : nameR,
     'phone'           : phoneR,

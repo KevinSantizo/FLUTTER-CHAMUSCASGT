@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:newsport/src/components/theme.dart';
-import 'package:newsport/src/services/auth.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -20,7 +19,6 @@ class _SignUpPage extends State<SignUpPage> {
 
   String textButton = 'Crear mi cuenta';
   final _formKey = GlobalKey<FormState>();
-  final AuthService _auth = new AuthService();
 
   
   String error    = '';
@@ -52,7 +50,7 @@ class _SignUpPage extends State<SignUpPage> {
           children: <Widget>[
             Text('¿Ya tienes cuenta?'),
             FlatButton(
-              child: Text('Inicia sesión'),
+              child: Text('Inicia sesión', style: TextStyle(color: Colors.lightBlue)),
               onPressed: () {
                 widget.toogleViews();
               },
@@ -74,7 +72,7 @@ class _SignUpPage extends State<SignUpPage> {
                   child: IconButton(
                     color: myTheme.primaryColor,
                     iconSize: 28.0,
-                    icon: Icon(Feather.x), onPressed: () => Navigator.popAndPushNamed(context, 'landing')
+                    icon: Icon(Feather.x), onPressed: () => widget.toogleViews()
                   ),
                 ),
                 SizedBox(height: 30.0,),
