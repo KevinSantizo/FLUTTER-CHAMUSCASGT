@@ -27,7 +27,7 @@ final slideList = [
   Slide(
     imageUrl: 'assets/ugoal.svg',
     title: 'Partidos express',
-    description: 'Consigue retos en tiempo real sino tienes contra quien jugar.'
+    description: 'Consigue retos en tiempo real si no tienes contra quien jugar.'
   ),
 
   Slide(

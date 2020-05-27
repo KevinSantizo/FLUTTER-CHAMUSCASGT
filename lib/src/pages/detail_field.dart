@@ -14,6 +14,8 @@ import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsport/src/components/reviews.dart';
+import 'package:newsport/src/models/user.dart';
+import 'package:provider/provider.dart';
 
 import '../components/theme.dart';
 import '../services/store.dart';
@@ -75,6 +77,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   String _text            = 'Reservar';
   String _warningDate     = '';
   String _warningSchedule = '';
+  
   final db = Firestore.instance.collection('users').document();
 
   List<int> data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
@@ -575,7 +578,12 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
  }
 
   Widget _draggable() {
-    // final bloc = Provider.of(context);
+  var user = Provider.of<User>(context).uid;
+  DocumentSnapshot com;
+  Firestore.instance.collection('users').document(user).get().then((f) {
+    com = f;
+    print(com.data.length);
+  } );
     return DraggableScrollableSheet(
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
@@ -682,8 +690,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 onSelected: (value) {   
                                   setState(() {
                                     schedule = value ? item + 12 : item = null;
-                                    print(schedule);
-                                    print(_hour);
                                     _warningSchedule = '';
                                   });
                                 },
@@ -698,8 +704,8 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                               ) 
                               else if (
                                 day == DateTime.now().day + 1 || day == DateTime.now().day + 2  || day == DateTime.now().day + 3
-                                 || day == DateTime.now().day + 4  || day == DateTime.now().day + 5  || day == DateTime.now().day + 6
-                                  || day == DateTime.now().day + 7  || day == DateTime.now().day + 8  || day == DateTime.now().day + 9 
+                                || day == DateTime.now().day + 4  || day == DateTime.now().day + 5  || day == DateTime.now().day + 6
+                                || day == DateTime.now().day + 7  || day == DateTime.now().day + 8  || day == DateTime.now().day + 9 
                               )
                               ChoiceChip(
                                 shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
@@ -844,9 +850,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                             color: myTheme.primaryColor,
                             onPressed: () async {
                               FirebaseUser user = await FirebaseAuth.instance.currentUser();
-                              print(user.uid); 
-                              print(user.providerData);
-                              print(schedule);
                               setState(() {
                                 newDate  == '' ?  _warningDate      = 'Debes seleccionar una fecha' :  _warningDate     = '';
                                 schedule == null ?  _warningSchedule  = 'Debes elegir un horario'     :  _warningSchedule = '';
@@ -860,6 +863,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                               );
                               await adReservationPerUser(
                                 widget.kd.data['address'],
+                                com?.data['name'],
                                 ballValue,
                                 widget.kd.data['city'],
                                 widget.kd.data['name'],
@@ -882,6 +886,30 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 widget.ds.data['type'],
                                 widget.ds.data['image_field_url'],
                               );
+                              await Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('reservation').document().setData({
+                                'address'         : widget.kd.data['address'],
+                                'user'            : com?.data['name'],
+                                'ball'            : ballValue,
+                                'city'            : widget.kd.data['city'],
+                                'company'         : widget.kd.data['name'],
+                                'month'           : month,
+                                'day'             : day,
+                                'year'            : year,
+                                'status'          : (day > DateTime.now().day) || (day >= DateTime.now().day && schedule > TimeOfDay.now().hour) ? 'Pendiente' : 'Jugado',
+                                'measures'        : widget.ds.data['measures'],
+                                'name'            : widget.ds.data['name'],
+                                'phone'           : widget.kd.data['phone'],
+                                'owner'           : widget.kd.data['owner'],
+                                'price'           : widget.ds.data['price'],
+                                'phone_user'      : com?.data['phone'],
+                                'logo_photo'      : widget.kd.data['logo_photo'],
+                                'schedule'        : schedule,
+                                'total'           : total,
+                                'tshirt'          : tShirtValue,
+                                'tshirts_total'   : tShirtValue ? counterTshirt : 0,
+                                'type'            : widget.ds.data['type'],
+                                'image_field_url' : widget.ds.data['image_field_url']
+                              });
                               Navigator.pop(context);
                               showDialog(
                                 context: context,

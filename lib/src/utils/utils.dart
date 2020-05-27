@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:newsport/src/pages/company.dart';
 // import 'package:football/src/pages/company.dart';
 
 
@@ -74,12 +75,12 @@ class DataSearch extends SearchDelegate<String> {
               subtitle: Text( '${fields[index]['address']}, ${fields[index]['city']}'),
               onTap: (){
                 close( context, null);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => CompanyPage(
-                //     ds: fields[index],
-                //   ))
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CompanyPage(
+                    ds: fields[index],
+                  ))
+                );
               },
             )
           );
@@ -91,31 +92,5 @@ class DataSearch extends SearchDelegate<String> {
       },
     );
   }
-  // @override
-  // Widget buildSuggestions(BuildContext context) {
-  //   // Son las sugerencias que aparecen cuando la persona escribe
-
-  //   final listaSugerida = ( query.isEmpty ) 
-  //                           ? peliculasRecientes
-  //                           : peliculas.where( 
-  //                             (p)=> p.toLowerCase().startsWith(query.toLowerCase()) 
-  //                           ).toList();
-
-
-  //   return ListView.builder(
-  //     itemCount: listaSugerida.length,
-  //     itemBuilder: (context, i) {
-  //       return ListTile(
-  //         leading: Icon(Icons.movie),
-  //         title: Text(listaSugerida[i]),
-  //         onTap: (){
-  //           seleccion = listaSugerida[i];
-  //           showResults( context );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
 }
 

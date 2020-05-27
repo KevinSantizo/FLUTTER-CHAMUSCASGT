@@ -1778,6 +1778,7 @@ markMatchAsPlayed(String idReservation) async {
 //Add reservations per user
 Future<bool> adReservationPerUser(
   String  addressR,
+  String  user,
   bool    isBallR,
   String  cityR,
   String  companyR,
@@ -1802,6 +1803,7 @@ Future<bool> adReservationPerUser(
 
   return await Firestore.instance.collection('users').document(currentUser.uid).collection('reservation').document().setData({
     'address'         : addressR,
+    'user'            : user,
     'ball'            : isBallR,
     'city'            : cityR,
     'company'         : companyR,
