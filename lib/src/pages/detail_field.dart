@@ -62,6 +62,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   }
 
   String  newDate           = '';
+  String  idSchedule        = '';
   int     schedule;          
   bool    ballValue         = false;  
   bool    scheduleValue     = false;
@@ -711,7 +712,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                   spacing: 5.0,
                                   children: <Widget>[
                                     for (var item in doc)
-                                    if(_hour < item['schedule'])
+                                    if(_hour < item['schedule'] && item['status'] == true)
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
@@ -742,6 +743,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         setState(() {
                                           schedule = value ? item['schedule'] : item = null;
                                           schedule = item['schedule'];
+                                          idSchedule = item.documentID;
                                           _warningSchedule = '';
                                         });
                                       },
@@ -880,7 +882,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                             color: myTheme.primaryColor,
                             onPressed: () async {
                               setState(() {
-                                newDate  == '' ?  _warningDate      = 'Debes seleccionar una fecha' :  _warningDate     = '';
+                                newDate  == '' ?  _warningDate        = 'Debes seleccionar una fecha' :  _warningDate     = '';
                                 schedule == null ?  _warningSchedule  = 'Debes elegir un horario'     :  _warningSchedule = '';
                               });
                               if (newDate != '' && schedule != null) {
@@ -900,8 +902,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 day,
                                 year,
                                 (day > DateTime.now().day) || (day >= DateTime.now().day && schedule > TimeOfDay.now().hour) ? 'Pendiente' : 'Jugado',
-                                
-                                //  widget.ds.data['description'],
                                 widget.ds.data['measures'],
                                 widget.ds.data['name'],
                                 widget.kd.data['phone'],
@@ -939,6 +939,11 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 'type'            : widget.ds.data['type'],
                                 'image_field_url' : widget.ds.data['image_field_url']
                               });
+                              await Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').document(idSchedule).updateData(
+                                {
+                                  'status' : false
+                                }
+                              );
                               Navigator.pop(context);
                               showDialog(
                                 context: context,
