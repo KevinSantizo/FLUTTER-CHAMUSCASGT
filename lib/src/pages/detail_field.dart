@@ -582,10 +582,18 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   Widget _draggable() {
   var user = Provider.of<User>(context).uid;
   DocumentSnapshot com;
+  DocumentSnapshot field;
+
   Firestore.instance.collection('users').document(user).get().then((f) {
     com = f;
     print(com.data.length);
-  } );
+  });
+  Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').getDocuments().then((f) {
+    f.documents.forEach((element) { 
+      field = element;
+      print('Data of field schedules:  ${field.documentID}');
+    });
+  });
     return DraggableScrollableSheet(
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
@@ -732,9 +740,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         ),
                                       ),
                                     )
-                                    else if (
-                                      day > DateTime.now().day
-                                    )
+                                    else if (day > DateTime.now().day && item['status'] == true)
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
@@ -941,7 +947,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                               });
                               await Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').document(idSchedule).updateData(
                                 {
-                                  'status' : false
+                                  'status' : day == DateTime.now().day ? false : true
                                 }
                               );
                               Navigator.pop(context);
