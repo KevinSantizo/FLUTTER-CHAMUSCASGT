@@ -15,6 +15,7 @@ import 'package:loading/loading.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsport/src/components/reviews.dart';
 import 'package:newsport/src/models/user.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 
 import '../components/theme.dart';
@@ -676,65 +677,94 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                       child: Text('Elije un horario', textScaleFactor: 1.3, style: GoogleFonts.montserrat(textStyle: TextStyle(fontWeight: FontWeight.bold)))
                     ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-                        child: Center(
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 5.0,
-                            children: <Widget>[
-                              for (var item in data)
-                              if(_hour < item + 12)
-                              ChoiceChip(
-                                shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
-                                label: Text('${item +12}:00 PM'), 
-                                onSelected: (value) {   
-                                  setState(() {
-                                    schedule = value ? item + 12 : item = null;
-                                    _warningSchedule = '';
-                                  });
-                                },
-                                selected: schedule == item + 12,
-                                selectedColor: myTheme.primaryColor,
-                                labelStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: schedule == item + 12 ? Colors.white : Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').orderBy('schedule', descending: false).snapshots(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                            if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
+                            final data = snapshot.data.documents;
+                            if ( data?.isEmpty ?? false ){
+                              return Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.symmetric(horizontal: 15.0),
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text('Aún no hay horarios disponibles.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
+                                          Icon(Feather.clock, size: 40.0)
+                                        ],
+                                      )
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              backgroundColor: Colors.transparent,
-                              ) 
-                              else if (
-                                day == DateTime.now().day + 1 || day == DateTime.now().day + 2  || day == DateTime.now().day + 3
-                                || day == DateTime.now().day + 4  || day == DateTime.now().day + 5  || day == DateTime.now().day + 6
-                                || day == DateTime.now().day + 7  || day == DateTime.now().day + 8  || day == DateTime.now().day + 9 
-                              )
-                              ChoiceChip(
-                                shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
-                                label: Text('${item +12}:00 PM'), 
-                                onSelected: (value) {   
-                                  setState(() {
-                                    schedule = value ? item+ 12 :  item = null;
-                                    _warningSchedule = '';
-                                  });
-
-                                },
-                                selected: schedule == item + 12,
-                                selectedColor: myTheme.primaryColor,
-                                labelStyle: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: schedule == item + 12 ? Colors.white : Colors.black,
+                              );
+                            } else {
+                              final doc = snapshot.data.documents;
+                              return Center(
+                                child: Wrap(
+                                  alignment: WrapAlignment.spaceBetween,
+                                  spacing: 5.0,
+                                  children: <Widget>[
+                                    for (var item in doc)
+                                    if(_hour < item['schedule'])
+                                    ChoiceChip(
+                                      shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
+                                      label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
+                                      backgroundColor: Colors.transparent,
+                                       onSelected: (value) {   
+                                        setState(() {
+                                          schedule = value ? item['schedule'] : item = null;
+                                          schedule = item['schedule'];
+                                          _warningSchedule = '';
+                                        });
+                                      },
+                                      selected: schedule == item['schedule'],
+                                      selectedColor: myTheme.primaryColor,
+                                      labelStyle: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: schedule == item['schedule'] ? Colors.white : Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                    else if (
+                                      day > DateTime.now().day
+                                    )
+                                    ChoiceChip(
+                                      shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
+                                      label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
+                                      backgroundColor: Colors.transparent,
+                                       onSelected: (value) {   
+                                        setState(() {
+                                          schedule = value ? item['schedule'] : item = null;
+                                          schedule = item['schedule'];
+                                          _warningSchedule = '';
+                                        });
+                                      },
+                                      selected: schedule == item['schedule'],
+                                      selectedColor: myTheme.primaryColor,
+                                      labelStyle: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: schedule == item['schedule'] ? Colors.white : Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                              backgroundColor: Colors.transparent,
-                              ) 
-                            ],
-                          ),
+                              );
+                            }
+                          },
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Text(_warningSchedule, style: GoogleFonts.montserrat(color: Colors.red), ),
                       ),
-                      SizedBox(height: _warningSchedule == null ? 0.0 : 20.0,),
+                      SizedBox(height: _warningSchedule == '' ? 0.0 : 10.0,),
                       Container(
                         padding: EdgeInsets.only(left: 15.0, top: 7.0, bottom: 7.0),
                         width: double.infinity,
@@ -849,7 +879,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                             ),
                             color: myTheme.primaryColor,
                             onPressed: () async {
-                              FirebaseUser user = await FirebaseAuth.instance.currentUser();
                               setState(() {
                                 newDate  == '' ?  _warningDate      = 'Debes seleccionar una fecha' :  _warningDate     = '';
                                 schedule == null ?  _warningSchedule  = 'Debes elegir un horario'     :  _warningSchedule = '';
