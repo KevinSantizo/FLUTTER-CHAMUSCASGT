@@ -583,7 +583,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   var user = Provider.of<User>(context).uid;
   DocumentSnapshot com;
   DocumentSnapshot field;
-
+  DocumentSnapshot reservationField;
   Firestore.instance.collection('users').document(user).get().then((f) {
     com = f;
     print(com.data.length);
@@ -592,6 +592,11 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
     f.documents.forEach((element) { 
       field = element;
       print('Data of field schedules:  ${field.documentID}');
+    });
+  });
+  Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('reservation').getDocuments().then((f) {
+    f.documents.forEach((element) { 
+      print(element);
     });
   });
     return DraggableScrollableSheet(
@@ -740,7 +745,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         ),
                                       ),
                                     )
-                                    else if (day > DateTime.now().day && item['status'] == true)
+                                    else if (day > DateTime.now().day && item['status'] == true || month == DateTime.now().month + 1 && item['status'] == true)
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
@@ -1061,55 +1066,55 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                     Row(
                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                      children: <Widget>[
-                       Row(
-                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(_reviewsList[i].image),
-                          ),
-                          VerticalDivider(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(_reviewsList[i].name, style: GoogleFonts.montserrat(textStyle: TextStyle(fontWeight: FontWeight.bold) ),),
-                              Text(_reviewsList[i].coment),
-                            ],
-                          ),
-                         ],
-                       ),
-                        Row(
+                      Row(
+                        children: <Widget>[
+                        CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          backgroundImage: NetworkImage(_reviewsList[i].image),
+                        ),
+                        VerticalDivider(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text('Very good ${_reviewsList[i].rating}'),
-                                RatingBar(
-                                  itemSize: 15.0,
-                                  initialRating: _reviewsList[i].rating,
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
-                                  },
-                                )
-                              ],
-                            )
+                            Text(_reviewsList[i].name, style: GoogleFonts.montserrat(textStyle: TextStyle(fontWeight: FontWeight.bold) ),),
+                            Text(_reviewsList[i].coment),
                           ],
                         ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Very good ${_reviewsList[i].rating}'),
+                              RatingBar(
+                                itemSize: 15.0,
+                                initialRating: _reviewsList[i].rating,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                                itemBuilder: (context, _) => Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                      ],
                    ),
-                    Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 
-                      textAlign: TextAlign.justify,
-                      style: GoogleFonts.montserrat(textStyle: TextStyle(color: Colors.grey)),
-                    ),
+                  Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.montserrat(textStyle: TextStyle(color: Colors.grey)),
+                  ),
                  ],
                ),
              )
