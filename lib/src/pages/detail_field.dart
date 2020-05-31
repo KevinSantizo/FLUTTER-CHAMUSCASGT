@@ -591,12 +591,14 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').getDocuments().then((f) {
     f.documents.forEach((element) { 
       field = element;
-      print('Data of field schedules:  ${field.documentID}');
+      print(field.data);
     });
   });
   Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('reservation').getDocuments().then((f) {
     f.documents.forEach((element) { 
-      print(element);
+      reservationField = element;
+      print(reservationField.data['address']);
+      print(reservationField.data['schedule']);
     });
   });
     return DraggableScrollableSheet(
@@ -724,8 +726,10 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                   alignment: WrapAlignment.spaceBetween,
                                   spacing: 5.0,
                                   children: <Widget>[
+                                    // for (var i = 0; i < reservationField.data.length; i++)
                                     for (var item in doc)
-                                    if(_hour < item['schedule'] && item['status'] == true)
+                                    // if(_hour < item['schedule'] && item['status'] == true)
+                                    if (reservationField?.data['schedule'] != item['schedule'] && _hour < item['schedule'])
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
@@ -745,7 +749,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         ),
                                       ),
                                     )
-                                    else if (day > DateTime.now().day && item['status'] == true || month == DateTime.now().month + 1 && item['status'] == true)
+                                    else if ((day > DateTime.now().day && item['status'] == true || month == DateTime.now().month + 1) && (day > DateTime.now().day && reservationField?.data['schedule'] != item['schedule']))
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
