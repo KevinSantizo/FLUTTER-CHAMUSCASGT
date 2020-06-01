@@ -720,16 +720,16 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 ),
                               );
                             } else {
-                              final doc = snapshot.data.documents;
+                              final doc = snapshot.data;
                               return Center(
                                 child: Wrap(
                                   alignment: WrapAlignment.spaceBetween,
                                   spacing: 5.0,
                                   children: <Widget>[
                                     // for (var i = 0; i < reservationField.data.length; i++)
-                                    for (var item in doc)
-                                    // if(_hour < item['schedule'] && item['status'] == true)
-                                    if (reservationField?.data['schedule'] != item['schedule'] && _hour < item['schedule'])
+                                    for (var item in doc.documents)
+                                    if(reservationField?.data['schedule'] != item['schedule'] && _hour < item['schedule'])
+                                    // if (_hour < item['schedule'])
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
@@ -749,7 +749,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         ),
                                       ),
                                     )
-                                    else if ((day > DateTime.now().day && item['status'] == true || month == DateTime.now().month + 1) && (day > DateTime.now().day && reservationField?.data['schedule'] != item['schedule']))
+                                    else if ((day > DateTime.now().day || month == DateTime.now().month + 1) || (day > DateTime.now().day || month == DateTime.now().month + 1 && day == item['day'] && reservationField?.data['schedule'] != item['schedule']) )
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
