@@ -85,9 +85,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   List<int> data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
   int _hour      = TimeOfDay.now().hour;
 
-
-
-
   final List _imgDetail = [
 
   'https://cdn.pixabay.com/photo/2017/08/10/01/38/grass-2616911_960_720.jpg',
@@ -742,14 +739,16 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         });
                                       },
                                       selected: schedule == item['schedule'],
-                                      selectedColor: myTheme.primaryColor,
+                                      selectedColor: myTheme.primaryColor, 
                                       labelStyle: GoogleFonts.montserrat(
                                         textStyle: TextStyle(
                                           color: schedule == item['schedule'] ? Colors.white : Colors.black,
                                         ),
                                       ),
                                     )
-                                    else if ((day > DateTime.now().day || month == DateTime.now().month + 1) || (day > DateTime.now().day || month == DateTime.now().month + 1 && day == item['day'] && reservationField?.data['schedule'] != item['schedule']) )
+                                    else if (day > DateTime.now().day || month == DateTime.now().month + 1)
+                                    if(reservationField?.data['schedule'] != item['schedule'])
+                                    // else if ((reservationField?.data['schedule'] != item['schedule'] ) && (day > DateTime.now().day || month == DateTime.now().month + 1) && ((reservationField?.data['day'] != day)))
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
