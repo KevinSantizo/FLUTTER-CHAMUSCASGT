@@ -746,9 +746,8 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                         ),
                                       ),
                                     )
-                                    else if (day > DateTime.now().day || month == DateTime.now().month + 1)
-                                    if(reservationField?.data['schedule'] != item['schedule'])
-                                    // else if ((reservationField?.data['schedule'] != item['schedule'] ) && (day > DateTime.now().day || month == DateTime.now().month + 1) && ((reservationField?.data['day'] != day)))
+                                    // else if ((day > DateTime.now().day || month == DateTime.now().month + 1 && reservationField?.data['schedule'] != item['schedule']) || (day == reservationField?.data['day'] && reservationField?.data['schedule'] != item['schedule']))
+                                    else if (reservationField?.data['schedule'] != item['schedule'] && day > DateTime.now().day || month == DateTime.now().month + 1)
                                     ChoiceChip(
                                       shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
                                       label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
