@@ -59,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage>   {
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesome.soccer_ball_o),
-            title: Text('Partidos'),
+            title: Text('Reservas'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Feather.heart),

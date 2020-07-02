@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -82,7 +81,7 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
   
   final db = Firestore.instance.collection('users').document();
 
-  List<int> data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
+  List<int> data = [5, 6, 7, 8, 9, 10, 11, 12 ];
   int _hour      = TimeOfDay.now().hour;
 
   final List _imgDetail = [
@@ -690,91 +689,60 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                       color: Colors.grey.withOpacity(0.3),
                       child: Text('Elije un horario', textScaleFactor: 1.3, style: GoogleFonts.montserrat(textStyle: TextStyle(fontWeight: FontWeight.bold)))
                     ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').orderBy('schedule', descending: false).snapshots(),
-                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                            if(snapshot.data == null) return Center(child: JumpingDotsProgressIndicator(fontSize: 50.0,));
-                            final data = snapshot.data.documents;
-                            if ( data?.isEmpty ?? false ){
-                              return Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(horizontal: 15.0),
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  // mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Center(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text('Aún no hay horarios disponibles.', textScaleFactor: 1.1, style: GoogleFonts.ubuntu(),),
-                                          Icon(Feather.clock, size: 40.0)
-                                        ],
-                                      )
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              final doc = snapshot.data;
-                              return Center(
-                                child: Wrap(
-                                  alignment: WrapAlignment.spaceBetween,
-                                  spacing: 5.0,
-                                  children: <Widget>[
-                                    for (var item in doc.documents)
-                                    if( reservationField?.data['schedule'] != item['schedule'] && _hour < item['schedule'])
-                                    ChoiceChip(
-                                      shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
-                                      label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
-                                      backgroundColor: Colors.transparent,
-                                       onSelected: (value) {   
-                                        setState(() {
-                                          schedule = value ? item['schedule'] : item = null;
-                                          schedule = item['schedule'];
-                                          _warningSchedule = '';
-                                        });
-                                      },
-                                      selected: schedule == item['schedule'],
-                                      selectedColor: myTheme.primaryColor, 
-                                      labelStyle: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: schedule == item['schedule'] ? Colors.white : Colors.black,
-                                        ),
-                                      ),
-                                    )                                    
-                                    // else if (day > DateTime.now().day || month == DateTime.now().month + 1 && reservationField?.data['schedule'] != item['schedule'])
-                                    // else if (reservationField?.data['schedule'] != item['schedule'] && day > DateTime.now().day || month == DateTime.now().month + 1)
-                                    else if ((day > DateTime.now().day || month == DateTime.now().month + 1) && (reservationField?.data['schedule'] == item['schedule']))
-                                    ChoiceChip(
-                                      shape: StadiumBorder(side: BorderSide(color: schedule == item['schedule'] ? Colors.white : Colors.grey)),
-                                      label: Text('${item['schedule']}:00 hrs', style: GoogleFonts.ubuntu()),
-                                      backgroundColor: Colors.transparent,
-                                       onSelected: (value) {   
-                                        setState(() {
-                                          schedule = value ? item['schedule'] : item = null;
-                                          schedule = item['schedule'];
-                                          idSchedule = item.documentID;
-                                          _warningSchedule = '';
-                                        });
-                                      },
-                                      selected: schedule == item['schedule'],
-                                      selectedColor: myTheme.primaryColor,
-                                      labelStyle: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: schedule == item['schedule'] ? Colors.white : Colors.black,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }
-                          },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+                      child: Center(
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 5.0,
+                          children: <Widget>[
+                            for (var item in data)
+                            if(_hour < item + 12)
+                            ChoiceChip(
+                              shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
+                              label: Text('${item +12}:00 PM'), 
+                              onSelected: (value) {   
+                                setState(() {
+                                  schedule = value ? item + 12 : item = null;
+                                  print(schedule);
+                                  print(_hour);
+                                  _warningSchedule = '';
+                                });
+                              },
+                              selected: schedule == item + 12,
+                              selectedColor: myTheme.primaryColor,
+                              labelStyle: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: schedule == item + 12 ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            backgroundColor: Colors.transparent,
+                            ) 
+                            else if (day == DateTime.now().day + 1)
+                            ChoiceChip(
+                              shape: StadiumBorder(side: BorderSide(color: schedule == item + 12 ? Colors.white : Colors.grey)),
+                              label: Text('${item +12}:00 PM'), 
+                              onSelected: (value) {   
+                                setState(() {
+                                  schedule = value ? item + 12 : item = null;
+                                  print(schedule);
+                                  print(_hour);
+                                  _warningSchedule = '';
+                                });
+                              },
+                              selected: schedule == item + 12,
+                              selectedColor: myTheme.primaryColor,
+                              labelStyle: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: schedule == item + 12 ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            backgroundColor: Colors.transparent,
+                            ) 
+                          ],
                         ),
                       ),
+                    ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Text(_warningSchedule, style: GoogleFonts.montserrat(color: Colors.red), ),
@@ -952,11 +920,6 @@ class _FieldDetailState extends State<FieldDetail> with TickerProviderStateMixin
                                 'type'            : widget.ds.data['type'],
                                 'image_field_url' : widget.ds.data['image_field_url']
                               });
-                              await Firestore.instance.collection('company').document(widget.kd.documentID).collection('fields').document(widget.ds.documentID).collection('schedules').document(idSchedule).updateData(
-                                {
-                                  'status' : day == DateTime.now().day ? false : true
-                                }
-                              );
                               Navigator.pop(context);
                               showDialog(
                                 context: context,

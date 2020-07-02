@@ -43,7 +43,7 @@ getNewsCompanies(BuildContext context) {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 15.0, top: 25.0,),
+            padding: EdgeInsets.only(left: 15.0, top: 10.0,),
             child: Row(
               children: <Widget>[
                 Transform.rotate(
@@ -121,7 +121,7 @@ getNewsCompanies(BuildContext context) {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
                                         Container(
-                                          child: Text(doc.data['name'], textScaleFactor: 2.0, style:  GoogleFonts.ubuntu(color: Colors.white),)
+                                          child: Text(doc.data['name'], textScaleFactor: 1.7, style:  GoogleFonts.ubuntu(color: Colors.white),)
                                         ),
                                         SizedBox(height: 10.0,),
                                         Row(
@@ -515,7 +515,7 @@ getReservationsToday(BuildContext context) {
                               child: Card(
                                 elevation: 3.0,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -1799,8 +1799,8 @@ Future<bool> adReservationPerUser(
   String  typeR,
   String  urlImageR,
 ) async {
-  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
 
+  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
   return await Firestore.instance.collection('users').document(currentUser.uid).collection('reservation').document().setData({
     'address'         : addressR,
     'user'            : user,

@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
         ],
         automaticallyImplyLeading: false,
         elevation: 0.0,
-        expandedHeight: _screenSize.height * 0.43,
+        expandedHeight: _screenSize.height * 0.29,
         floating: true,
         pinned: false,
         flexibleSpace: FlexibleSpaceBar(
@@ -156,13 +156,15 @@ class _HomeState extends State<Home> {
       child: Container(
         color: Colors.white,
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-        height: 150.0,
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
+        // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
+        height: 120.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // physics: BouncingScrollPhysics(),
+          // scrollDirection: Axis.horizontal,
           children: <Widget>[
             Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
@@ -172,7 +174,7 @@ class _HomeState extends State<Home> {
                       color: myTheme.primaryColor.withOpacity(0.06),
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                     margin: EdgeInsets.symmetric(horizontal: 13.0,),
                     child: Icon(FontAwesome.trophy, color: myTheme.primaryColor, size: 35.0,),
                   ),
@@ -191,7 +193,7 @@ class _HomeState extends State<Home> {
                       color: myTheme.primaryColor.withOpacity(0.06),
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                       margin: EdgeInsets.symmetric(horizontal: 13.0,),
                     child: Icon(FontAwesome.soccer_ball_o, color: myTheme.primaryColor, size: 35.0,),
                   ),
@@ -210,7 +212,7 @@ class _HomeState extends State<Home> {
                       color: myTheme.primaryColor.withOpacity(0.06),
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
                       margin: EdgeInsets.symmetric(horizontal: 13.0,),
                     child: Icon(Feather.calendar, color: myTheme.primaryColor, size: 35.0,),
                   ),
@@ -229,7 +231,7 @@ class _HomeState extends State<Home> {
                       color: myTheme.primaryColor.withOpacity(0.06),
                       borderRadius: BorderRadius.circular(10.0)
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 18.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                       margin: EdgeInsets.symmetric(horizontal: 13.0,),
                     child: Icon(MdiIcons.tshirtCrewOutline, color: myTheme.primaryColor, size: 35.0,),
                   ),
